@@ -112,6 +112,8 @@ public class UserService implements UserDetailsService {
         String jwtToken = jwtService.generateToken(user);
         
         return AuthenticationResponse.builder()
+                .name(user.getName())
+                .roles(user.getRoles())
                 .token(jwtToken)
                 .build();
     }
