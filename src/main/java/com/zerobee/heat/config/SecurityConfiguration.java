@@ -32,6 +32,12 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         // Define public endpoints here (if any)
                         .requestMatchers("/api/auth/**").permitAll()
+                        .requestMatchers(       //TODO remove krna hai swagger ko
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/swagger-resources/**",
+                                "/webjars/**").permitAll()
                         // All other endpoints require authentication
                         .anyRequest().authenticated()
                 )

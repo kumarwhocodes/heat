@@ -90,7 +90,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     
     private boolean shouldSkipAuthentication(String path) {             // Add paths that should bypass authentication
         return path.contains("/api/auth") ||
-                path.contains("/swagger-ui") ||
+                path.contains("/swagger-ui/**") ||
                 path.contains("/v3/api-docs") ||
                 path.equals("/");
     }
