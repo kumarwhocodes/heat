@@ -49,7 +49,7 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
     
-    public UserDTO getUserById(Integer id) {
+    public UserDTO getUserById(String id) {
         User user = userRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
         return userMapper.toDTO(user);
@@ -66,6 +66,9 @@ public class UserService implements UserDetailsService {
      */
     @Transactional
     public UserDTO createUser(UserDTO userDTO) {
+        if (userRepo.existsById(userDTO.getId())) {
+            throw new IllegalArgumentException("ID already taken!");
+        }
         if (userRepo.existsByEmail(userDTO.getEmail())) {
             throw new IllegalArgumentException("Email already in use");
         }
@@ -119,7 +122,7 @@ public class UserService implements UserDetailsService {
     }
     
     @Transactional
-    public UserDTO updateUser(Integer id, UserDTO userDTO) {
+    public UserDTO updateUser(String id, UserDTO userDTO) {
         User existingUser = userRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
         
@@ -146,7 +149,7 @@ public class UserService implements UserDetailsService {
     }
     
     @Transactional
-    public void deleteUser(Integer id) {
+    public void deleteUser(String id) {
         if (!userRepo.existsById(id)) {
             throw new ResourceNotFoundException("User not found with id: " + id);
         }
@@ -154,7 +157,7 @@ public class UserService implements UserDetailsService {
     }
     
     @Transactional
-    public UserDTO addRoleToUser(Integer userId, String roleName) {
+    public UserDTO addRoleToUser(String userId, String roleName) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
         
@@ -168,7 +171,7 @@ public class UserService implements UserDetailsService {
     }
     
     @Transactional
-    public UserDTO removeRoleFromUser(Integer userId, String roleName) {
+    public UserDTO removeRoleFromUser(String userId, String roleName) {
         User user = userRepo.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
         

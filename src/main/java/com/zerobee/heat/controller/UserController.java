@@ -36,7 +36,7 @@ public class UserController {
     
     @GetMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
-    public CustomResponse<UserDTO> getUserById(@PathVariable Integer id) {
+    public CustomResponse<UserDTO> getUserById(@PathVariable String id) {
         return new CustomResponse<>(HttpStatus.OK, "User fetched by ID", userService.getUserById(id));
     }
     
@@ -48,13 +48,13 @@ public class UserController {
     
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN') or #id == authentication.principal.id")
-    public CustomResponse<UserDTO> updateUser(@PathVariable Integer id, @Valid @RequestBody UserDTO userDTO) {
+    public CustomResponse<UserDTO> updateUser(@PathVariable String id, @Valid @RequestBody UserDTO userDTO) {
         return new CustomResponse<>(HttpStatus.OK, "User updated successfully", userService.updateUser(id, userDTO));
     }
     
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public CustomResponse<Void> deleteUser(@PathVariable Integer id) {
+    public CustomResponse<Void> deleteUser(@PathVariable String id) {
         userService.deleteUser(id);
         return new CustomResponse<>(HttpStatus.OK, "User deleted successfully", null);
     }
@@ -65,13 +65,13 @@ public class UserController {
     
     @PostMapping("/{userId}/roles/{roleName}")
     @PreAuthorize("hasRole('ADMIN')")
-    public CustomResponse<UserDTO> addRoleToUser(@PathVariable Integer userId, @PathVariable String roleName) {
+    public CustomResponse<UserDTO> addRoleToUser(@PathVariable String userId, @PathVariable String roleName) {
         return new CustomResponse<>(HttpStatus.OK, "Role added to user", userService.addRoleToUser(userId, roleName));
     }
     
     @DeleteMapping("/{userId}/roles/{roleName}")
     @PreAuthorize("hasRole('ADMIN')")
-    public CustomResponse<UserDTO> removeRoleFromUser(@PathVariable Integer userId, @PathVariable String roleName) {
+    public CustomResponse<UserDTO> removeRoleFromUser(@PathVariable String userId, @PathVariable String roleName) {
         return new CustomResponse<>(HttpStatus.OK, "Role removed from user", userService.removeRoleFromUser(userId, roleName));
     }
 }

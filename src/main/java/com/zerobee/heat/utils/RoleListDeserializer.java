@@ -35,7 +35,7 @@ public class RoleListDeserializer extends JsonDeserializer<Set<RoleDTO>> {
                     }
                     
                     if (element.has("id")) {
-                        roleDTO.setId(element.get("id").asInt());
+                        roleDTO.setId(String.valueOf(element.get("id").asInt()));
                     }
                     
                     roles.add(roleDTO);

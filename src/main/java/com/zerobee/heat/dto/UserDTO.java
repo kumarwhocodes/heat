@@ -19,7 +19,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-    private Integer id;
+    private String id;
     
     @NotBlank(message = "Name is required")
     private String name;
