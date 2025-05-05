@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -73,5 +75,18 @@ public class UserController {
     @PreAuthorize("hasRole('ADMIN')")
     public CustomResponse<UserDTO> removeRoleFromUser(@PathVariable String userId, @PathVariable String roleName) {
         return new CustomResponse<>(HttpStatus.OK, "Role removed from user", userService.removeRoleFromUser(userId, roleName));
+    }
+    
+    @GetMapping("/me")
+    public CustomResponse<UserDTO> fetchCurrentUser(@RequestParam(required = false) boolean includeRoles) {
+        // Access security context to get current user's email
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+        String currentUserEmail = authentication.getName();
+        return new CustomResponse<>(
+                HttpStatus.OK,
+                "User fetched",
+                userService.getUserByEmail(currentUserEmail)
+        );
     }
 }
