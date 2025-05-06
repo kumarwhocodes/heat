@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -22,7 +23,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{id}")
-    public CustomResponse<CustomerDTO> getCustomer(@PathVariable String id) {
+    public CustomResponse<CustomerDTO> getCustomer(@PathVariable UUID id) {
         return new CustomResponse<>(HttpStatus.OK,"Customer Fetched",customerService.getCustomerById(id));
     }
 
@@ -32,12 +33,12 @@ public class CustomerController {
     }
 
     @PutMapping("/{id}")
-    public CustomResponse<CustomerDTO> updateCustomer(@PathVariable String id,@Valid @RequestBody CustomerDTO customerDTO) {
+    public CustomResponse<CustomerDTO> updateCustomer(@PathVariable UUID id,@Valid @RequestBody CustomerDTO customerDTO) {
         return new CustomResponse<>(HttpStatus.OK,"Customer Updated",customerService.updateCustomer(id,customerDTO));
     }
 
     @DeleteMapping("/{id}")
-    public CustomResponse<Void> deleteCustomer(@PathVariable String id) {
+    public CustomResponse<Void> deleteCustomer(@PathVariable UUID id) {
         customerService.deleteCustomer(id);
         return new CustomResponse<>(HttpStatus.NO_CONTENT,"Customer Deleted",null);
     }

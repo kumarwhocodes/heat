@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +27,7 @@ public class CustomerService {
                 .collect(Collectors.toList());
     }
 
-    public CustomerDTO getCustomerById(String id) {
+    public CustomerDTO getCustomerById(UUID id) {
         Customer customer = customerRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
         return customerMapper.toDTO(customer);
@@ -40,7 +41,7 @@ public class CustomerService {
         return customerMapper.toDTO(savedCustomer);
     }
 
-    public CustomerDTO updateCustomer(String id,CustomerDTO customerDTO) {
+    public CustomerDTO updateCustomer(UUID id,CustomerDTO customerDTO) {
 
         Customer existingCustomer = customerRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
@@ -55,7 +56,7 @@ public class CustomerService {
         return customerMapper.toDTO(updatedCustomer);
     }
 
-    public void deleteCustomer(String id) {
+    public void deleteCustomer(UUID id) {
 
         if(!customerRepo.existsById(id)){
             throw new ResourceNotFoundException("Customer not found with id: " + id);
