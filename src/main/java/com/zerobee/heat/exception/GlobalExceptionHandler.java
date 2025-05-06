@@ -42,6 +42,13 @@ public class GlobalExceptionHandler {
                 .body(new CustomResponse<>(HttpStatus.UNAUTHORIZED, "JWT signature validation failed", null));
     }
     
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<CustomResponse<Void>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new CustomResponse<>(HttpStatus.CONFLICT, ex.getMessage(), null));
+    }
+    
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<CustomResponse<Void>> handleResourceNotFoundException(ResourceNotFoundException ex) {
         return ResponseEntity

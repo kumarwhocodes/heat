@@ -25,7 +25,7 @@ public class RoleController {
     }
     
     @GetMapping("/{id}")
-    public CustomResponse<RoleDTO> getRoleById(@PathVariable Integer id) {
+    public CustomResponse<RoleDTO> getRoleById(@PathVariable String id) {
         return new CustomResponse<>(HttpStatus.OK, "Role fetched by ID", roleService.getRoleById(id));
     }
     
@@ -40,12 +40,12 @@ public class RoleController {
     }
     
     @PutMapping("/{id}")
-    public CustomResponse<RoleDTO> updateRole(@PathVariable Integer id, @Valid @RequestBody RoleDTO roleDTO) {
+    public CustomResponse<RoleDTO> updateRole(@PathVariable String id, @Valid @RequestBody RoleDTO roleDTO) {
         return new CustomResponse<>(HttpStatus.OK, "Role updated successfully", roleService.updateRole(id, roleDTO));
     }
     
     @DeleteMapping("/{id}")
-    public CustomResponse<Void> deleteRole(@PathVariable Integer id) {
+    public CustomResponse<Void> deleteRole(@PathVariable String id) {
         roleService.deleteRole(id);
         return new CustomResponse<>(HttpStatus.OK, "Role deleted successfully", null);
     }

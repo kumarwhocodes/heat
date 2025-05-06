@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoleDTO {
-    private Integer id;
+    private String id;
     private String name;
     
     @JsonCreator

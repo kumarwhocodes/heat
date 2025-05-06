@@ -26,7 +26,7 @@ public class RoleService {
                 .collect(Collectors.toList());
     }
     
-    public RoleDTO getRoleById(Integer id) {
+    public RoleDTO getRoleById(String id) {
         Role role = roleRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found with id: " + id));
         return roleMapper.toDTO(role);
@@ -51,7 +51,7 @@ public class RoleService {
     }
     
     @Transactional
-    public RoleDTO updateRole(Integer id, RoleDTO roleDTO) {
+    public RoleDTO updateRole(String id, RoleDTO roleDTO) {
         Role existingRole = roleRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found with id: " + id));
         
@@ -68,7 +68,7 @@ public class RoleService {
     }
     
     @Transactional
-    public void deleteRole(Integer id) {
+    public void deleteRole(String id) {
         if (!roleRepo.existsById(id)) {
             throw new ResourceNotFoundException("Role not found with id: " + id);
         }
