@@ -6,6 +6,7 @@ import com.zerobee.heat.dto.RoleDTO;
 import com.zerobee.heat.dto.UserDTO;
 import com.zerobee.heat.entity.Role;
 import com.zerobee.heat.entity.User;
+import com.zerobee.heat.exception.ConflictException;
 import com.zerobee.heat.exception.ResourceNotFoundException;
 import com.zerobee.heat.mapper.UserMapper;
 import com.zerobee.heat.repo.RoleRepo;
@@ -67,10 +68,10 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDTO createUser(UserDTO userDTO) {
         if (userRepo.existsById(userDTO.getId())) {
-            throw new IllegalArgumentException("ID already taken!");
+            throw new ConflictException("ID already taken!");
         }
         if (userRepo.existsByEmail(userDTO.getEmail())) {
-            throw new IllegalArgumentException("Email already in use");
+            throw new ConflictException("Email already in use");
         }
         
         // Encode password
