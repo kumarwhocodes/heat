@@ -57,6 +57,12 @@ dependencies {
 
 	// Swagger
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.5")
+
+	// Mail Starter
+	implementation("org.springframework.boot:spring-boot-starter-mail:3.4.5")
+
+	// Thymeleaf
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf:3.4.5")
 }
 
 tasks.withType<Test> {
