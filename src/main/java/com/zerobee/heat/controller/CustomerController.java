@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -34,7 +33,7 @@ public class CustomerController {
     }
     
     @PutMapping("/{id}")
-    public CustomResponse<CustomerDTO> updateCustomer(@PathVariable UUID id, @Valid @RequestBody CustomerDTO customerDTO) {
+    public CustomResponse<CustomerDTO> updateCustomer(@PathVariable String id, @RequestBody CustomerDTO customerDTO) {
         return new CustomResponse<>(HttpStatus.OK, "Customer Updated", customerService.updateCustomer(id, customerDTO));
     }
     

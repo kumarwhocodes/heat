@@ -75,7 +75,7 @@ public class UserService implements UserDetailsService {
         if (userRepo.existsByEmail(userDTO.getEmail())) {
             throw new ConflictException("Email already in use");
         }
-        
+        String password = userDTO.getPassword();                //storing password to pass it in the email
         // Encode password
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         
@@ -96,7 +96,7 @@ public class UserService implements UserDetailsService {
         user.setRoles(roles);
         
         User savedUser = userRepo.save(user);
-        emailService.sendWelcomeEmail(userMapper.toDTO(savedUser));
+        emailService.sendWelcomeEmail(userMapper.toDTO(savedUser), password);
         return userMapper.toDTO(savedUser);
     }
     

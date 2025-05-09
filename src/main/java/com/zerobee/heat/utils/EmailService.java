@@ -28,7 +28,7 @@ public class EmailService {
     @Value("${app.email.logo-path:/static/logo.png}")
     private String logoPath;
     
-    public void sendWelcomeEmail(UserDTO userDTO) {
+    public void sendWelcomeEmail(UserDTO userDTO, String password) {
         try {
             MimeMessage message = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
@@ -44,7 +44,7 @@ public class EmailService {
             Context context = new Context();
             context.setVariable("name", userDTO.getName());
             context.setVariable("username", userDTO.getEmail());
-            context.setVariable("password", userDTO.getPassword());
+            context.setVariable("password", password);
             
             // Process the HTML template with Thymeleaf
             String emailContent = templateEngine.process("welcome-email", context);

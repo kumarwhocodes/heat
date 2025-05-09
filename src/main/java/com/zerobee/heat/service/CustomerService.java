@@ -46,9 +46,9 @@ public class CustomerService {
         return customerMapper.toDTO(savedCustomer);
     }
     
-    public CustomerDTO updateCustomer(UUID id, CustomerDTO customerDTO) {
+    public CustomerDTO updateCustomer(String id, CustomerDTO customerDTO) {
         
-        Customer existingCustomer = customerRepo.findById(id)
+        Customer existingCustomer = customerRepo.findById(UUID.fromString(id))
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
         
         if (customerDTO.getName() != null) existingCustomer.setName(customerDTO.getName());
