@@ -28,18 +28,6 @@ public class RoleService {
                 .collect(Collectors.toList());
     }
     
-    public RoleDTO getRoleById(String id) {
-        Role role = roleRepo.findById(UUID.fromString(id))
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found with id: " + id));
-        return roleMapper.toDTO(role);
-    }
-    
-    public RoleDTO getRoleByName(String name) {
-        Role role = roleRepo.findByNameIgnoreCase(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found with name: " + name));
-        return roleMapper.toDTO(role);
-    }
-    
     @Transactional
     public RoleDTO createRole(RoleDTO roleDTO) {
         if (roleRepo.existsByName(roleDTO.getName())) {

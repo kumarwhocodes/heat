@@ -159,32 +159,4 @@ public class UserService implements UserDetailsService {
         }
         userRepo.deleteById(id);
     }
-    
-    @Transactional
-    public UserDTO addRoleToUser(String userId, String roleName) {
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
-        
-        Role role = roleRepo.findByNameIgnoreCase(roleName)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + roleName));
-        
-        user.getRoles().add(role);
-        User updatedUser = userRepo.save(user);
-        
-        return userMapper.toDTO(updatedUser);
-    }
-    
-    @Transactional
-    public UserDTO removeRoleFromUser(String userId, String roleName) {
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
-        
-        Role role = roleRepo.findByNameIgnoreCase(roleName)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + roleName));
-        
-        user.getRoles().remove(role);
-        User updatedUser = userRepo.save(user);
-        
-        return userMapper.toDTO(updatedUser);
-    }
 }
