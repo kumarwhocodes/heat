@@ -2,6 +2,7 @@ package com.zerobee.heat.service;
 
 import com.zerobee.heat.dto.RoleDTO;
 import com.zerobee.heat.entity.Role;
+import com.zerobee.heat.exception.ConflictException;
 import com.zerobee.heat.exception.ResourceNotFoundException;
 import com.zerobee.heat.mapper.RoleMapper;
 import com.zerobee.heat.repo.RoleRepo;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,18 +28,6 @@ public class RoleService {
                 .collect(Collectors.toList());
     }
     
-    public RoleDTO getRoleById(String id) {
-        Role role = roleRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found with id: " + id));
-        return roleMapper.toDTO(role);
-    }
-    
-    public RoleDTO getRoleByName(String name) {
-        Role role = roleRepo.findByNameIgnoreCase(name)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found with name: " + name));
-        return roleMapper.toDTO(role);
-    }
-    
     @Transactional
     public RoleDTO createRole(RoleDTO roleDTO) {
         if (roleRepo.existsByName(roleDTO.getName())) {
@@ -52,13 +42,13 @@ public class RoleService {
     
     @Transactional
     public RoleDTO updateRole(String id, RoleDTO roleDTO) {
-        Role existingRole = roleRepo.findById(id)
+        Role existingRole = roleRepo.findById(UUID.fromString(id))
                 .orElseThrow(() -> new ResourceNotFoundException("Role not found with id: " + id));
         
         // Check if new name doesn't conflict with other roles
         if (!existingRole.getName().equals(roleDTO.getName()) &&
                 roleRepo.existsByName(roleDTO.getName())) {
-            throw new IllegalArgumentException("Role already exists");
+            throw new ConflictException("Role already exists");
         }
         
         existingRole.setName(roleDTO.getName());
@@ -69,9 +59,9 @@ public class RoleService {
     
     @Transactional
     public void deleteRole(String id) {
-        if (!roleRepo.existsById(id)) {
+        if (!roleRepo.existsById(UUID.fromString(id))) {
             throw new ResourceNotFoundException("Role not found with id: " + id);
         }
-        roleRepo.deleteById(id);
+        roleRepo.deleteById(UUID.fromString(id));
     }
 }

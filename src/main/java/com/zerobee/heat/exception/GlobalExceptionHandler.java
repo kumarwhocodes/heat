@@ -42,6 +42,13 @@ public class GlobalExceptionHandler {
                 .body(new CustomResponse<>(HttpStatus.UNAUTHORIZED, "JWT signature validation failed", null));
     }
     
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<CustomResponse<Void>> handleConflictException(ConflictException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(new CustomResponse<>(HttpStatus.CONFLICT, ex.getMessage(), null));
+    }
+    
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<CustomResponse<Void>> handleIllegalArgumentException(IllegalArgumentException ex) {
         return ResponseEntity
@@ -72,13 +79,9 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<CustomResponse<Void>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
-        String message = ex.getMessage().contains("email")
-                ? "A user with this email already exists"
-                : "Data integrity violation: " + ex.getMessage();
-        
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(new CustomResponse<>(HttpStatus.CONFLICT, message, null));
+                .body(new CustomResponse<>(HttpStatus.CONFLICT, ex.getMessage(), null));
     }
     
     @ExceptionHandler({AccessDeniedException.class, AuthorizationDeniedException.class})

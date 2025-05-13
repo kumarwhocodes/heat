@@ -6,10 +6,12 @@ import com.zerobee.heat.dto.RoleDTO;
 import com.zerobee.heat.dto.UserDTO;
 import com.zerobee.heat.entity.Role;
 import com.zerobee.heat.entity.User;
+import com.zerobee.heat.exception.ConflictException;
 import com.zerobee.heat.exception.ResourceNotFoundException;
 import com.zerobee.heat.mapper.UserMapper;
 import com.zerobee.heat.repo.RoleRepo;
 import com.zerobee.heat.repo.UserRepo;
+import com.zerobee.heat.utils.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -35,6 +37,7 @@ public class UserService implements UserDetailsService {
     private final UserMapper userMapper;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final EmailService emailService;
     
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -67,12 +70,12 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserDTO createUser(UserDTO userDTO) {
         if (userRepo.existsById(userDTO.getId())) {
-            throw new IllegalArgumentException("ID already taken!");
+            throw new ConflictException("ID already taken!");
         }
         if (userRepo.existsByEmail(userDTO.getEmail())) {
-            throw new IllegalArgumentException("Email already in use");
+            throw new ConflictException("Email already in use");
         }
-        
+        String password = userDTO.getPassword();                //storing password to pass it in the email
         // Encode password
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         
@@ -93,6 +96,7 @@ public class UserService implements UserDetailsService {
         user.setRoles(roles);
         
         User savedUser = userRepo.save(user);
+        emailService.sendWelcomeEmail(userMapper.toDTO(savedUser), password);
         return userMapper.toDTO(savedUser);
     }
     
@@ -154,33 +158,5 @@ public class UserService implements UserDetailsService {
             throw new ResourceNotFoundException("User not found with id: " + id);
         }
         userRepo.deleteById(id);
-    }
-    
-    @Transactional
-    public UserDTO addRoleToUser(String userId, String roleName) {
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
-        
-        Role role = roleRepo.findByNameIgnoreCase(roleName)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + roleName));
-        
-        user.getRoles().add(role);
-        User updatedUser = userRepo.save(user);
-        
-        return userMapper.toDTO(updatedUser);
-    }
-    
-    @Transactional
-    public UserDTO removeRoleFromUser(String userId, String roleName) {
-        User user = userRepo.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
-        
-        Role role = roleRepo.findByNameIgnoreCase(roleName)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + roleName));
-        
-        user.getRoles().remove(role);
-        User updatedUser = userRepo.save(user);
-        
-        return userMapper.toDTO(updatedUser);
     }
 }

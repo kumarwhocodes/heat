@@ -24,16 +24,6 @@ public class RoleController {
         return new CustomResponse<>(HttpStatus.OK, "All roles fetched", roleService.getAllRoles());
     }
     
-    @GetMapping("/{id}")
-    public CustomResponse<RoleDTO> getRoleById(@PathVariable String id) {
-        return new CustomResponse<>(HttpStatus.OK, "Role fetched by ID", roleService.getRoleById(id));
-    }
-    
-    @GetMapping("/name/{name}")
-    public CustomResponse<RoleDTO> getRoleByName(@PathVariable String name) {
-        return new CustomResponse<>(HttpStatus.OK, "Role fetched by name", roleService.getRoleByName(name));
-    }
-    
     @PostMapping
     public CustomResponse<RoleDTO> createRole(@Valid @RequestBody RoleDTO roleDTO) {
         return new CustomResponse<>(HttpStatus.CREATED, "Role created successfully", roleService.createRole(roleDTO));
