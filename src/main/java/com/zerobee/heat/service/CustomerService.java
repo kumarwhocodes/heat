@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,9 +28,23 @@ public class CustomerService {
     }
     
     public CustomerDTO getCustomerById(String id) {
-        Customer customer = customerRepo.findById(UUID.fromString(id))
+        Customer customer = customerRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
         return customerMapper.toDTO(customer);
+    }
+    
+    private String generateCustomerId() {
+        Optional<Customer> lastCustomer = customerRepo
+                .findTopByIdStartingWithOrderByIdDesc("CUST_");
+        
+        int nextNumber = 1;
+        if (lastCustomer.isPresent()) {
+            String lastId = lastCustomer.get().getId();
+            String numericPart = lastId.substring("CUST_".length());
+            nextNumber = Integer.parseInt(numericPart) + 1;
+        }
+        
+        return "CUST_" + String.format("%03d", nextNumber);
     }
     
     public CustomerDTO createCustomer(CustomerDTO customerDTO) {
@@ -40,6 +54,8 @@ public class CustomerService {
         if (customerRepo.existsByEmail(customerDTO.getEmail())) {
             throw new ConflictException("Customer with email id already exists!");
         }
+        String newId = generateCustomerId();
+        customerDTO.setId(newId);
         Customer customer = customerMapper.toEntity(customerDTO);
         Customer savedCustomer = customerRepo.save(customer);
         
@@ -48,7 +64,7 @@ public class CustomerService {
     
     public CustomerDTO updateCustomer(String id, CustomerDTO customerDTO) {
         
-        Customer existingCustomer = customerRepo.findById(UUID.fromString(id))
+        Customer existingCustomer = customerRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
         
         if (customerDTO.getName() != null) existingCustomer.setName(customerDTO.getName());
@@ -63,10 +79,10 @@ public class CustomerService {
     
     public void deleteCustomer(String id) {
         
-        if (!customerRepo.existsById(UUID.fromString(id))) {
+        if (!customerRepo.existsById(id)) {
             throw new ResourceNotFoundException("Customer not found with id: " + id);
         }
-        customerRepo.deleteById(UUID.fromString(id));
+        customerRepo.deleteById(id);
     }
     
 }
