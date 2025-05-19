@@ -1,13 +1,14 @@
 package com.zerobee.heat.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Builder
@@ -18,14 +19,15 @@ import lombok.NoArgsConstructor;
 public class Customer {
     
     @Id
-    private String id;
-    
-    @Column(nullable = false)
-    private String name;
-    
-    private Integer age;
-    private String address;
-    private String phone;
-    private String email;
-    
+    private String customerId;
+    private String clientName;
+    private String clientEmail;
+    private String clientPhone;
+    private String nationality;
+    private String clientEmergencyPhone;
+    private String clientLanguage;
+    private String description;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Itinerary> itinerary = new ArrayList<>();
 }
