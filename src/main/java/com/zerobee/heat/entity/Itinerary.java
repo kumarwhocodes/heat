@@ -1,5 +1,8 @@
 package com.zerobee.heat.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,7 +22,8 @@ import java.util.List;
 public class Itinerary {
 
     @Id
-    private int itineraryId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer itineraryId;
 
     private String agentName;
     private String agentEmail;
@@ -40,8 +44,10 @@ public class Itinerary {
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @JsonBackReference
     private Customer customer;
 
     @OneToMany(mappedBy = "itinerary", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<DayWise> dayWiseList = new ArrayList<DayWise>();
+    @JsonManagedReference
+    private List<DayWise> dayWiseList;
 }

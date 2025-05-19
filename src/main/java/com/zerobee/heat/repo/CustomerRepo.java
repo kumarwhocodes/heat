@@ -9,9 +9,9 @@ import java.util.Optional;
 @Repository
 public interface CustomerRepo extends JpaRepository<Customer, String> {
     
-    boolean existsByPhone(String phone);
-    
-    boolean existsByEmail(String email);
-    
-    Optional<Customer> findTopByIdStartingWithOrderByIdDesc(String prefix);
+    boolean existsByClientPhone(String phone);
+
+    boolean existsByClientEmail(String email);
+
+    Optional<Customer> findTopByCustomerIdStartingWithOrderByCustomerIdDesc(String prefix);
 }

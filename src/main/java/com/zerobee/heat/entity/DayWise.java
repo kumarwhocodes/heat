@@ -1,5 +1,7 @@
 package com.zerobee.heat.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,12 +16,14 @@ import lombok.NoArgsConstructor;
 @Table(name = "dayWise")
 public class DayWise {
 
-    @Id @GeneratedValue
-    private long dayWiseId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer dayWiseId;
 
     private String day;
 
     @ManyToOne
     @JoinColumn(name = "itinerary_id")
+    @JsonBackReference
     private Itinerary itinerary;
 }

@@ -1,5 +1,6 @@
 package com.zerobee.heat.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,5 +30,6 @@ public class Customer {
     private String description;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Itinerary> itinerary = new ArrayList<>();
+    @JsonManagedReference
+    private List<Itinerary> itineraries;
 }
