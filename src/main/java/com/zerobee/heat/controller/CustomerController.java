@@ -2,6 +2,7 @@ package com.zerobee.heat.controller;
 
 import com.zerobee.heat.dto.CustomResponse;
 import com.zerobee.heat.dto.CustomerDTO;
+import com.zerobee.heat.dto.DayWiseDto;
 import com.zerobee.heat.dto.ItineraryDto;
 import com.zerobee.heat.service.CustomerService;
 import jakarta.validation.Valid;
@@ -64,5 +65,31 @@ public class CustomerController {
     public CustomResponse<String> deleteItinerary(@PathVariable UUID itineraryId) {
         customerService.deleteItinerary(itineraryId);
         return new CustomResponse<>(HttpStatus.OK, "Itinerary deleted successfully", null);
+    }
+
+    @PostMapping("/daywise/itinerary/{itineraryId}")
+    public CustomResponse<DayWiseDto> addDayWise(@PathVariable UUID itineraryId, @RequestBody DayWiseDto dto) {
+        return new CustomResponse<>(HttpStatus.OK, "DayWise added", customerService.createDayWise(itineraryId, dto));
+    }
+
+    @GetMapping("/daywise/{id}")
+    public CustomResponse<DayWiseDto> getDayWise(@PathVariable UUID id) {
+        return new CustomResponse<>(HttpStatus.OK, "DayWise fetched", customerService.getDayWiseById(id));
+    }
+
+    @GetMapping("/daywise/itinerary/{itineraryId}")
+    public CustomResponse<List<DayWiseDto>> getDayWiseByItinerary(@PathVariable UUID itineraryId) {
+        return new CustomResponse<>(HttpStatus.OK, "DayWise list fetched", customerService.getDayWiseByItinerary(itineraryId));
+    }
+
+    @PutMapping("/daywise/{id}")
+    public CustomResponse<DayWiseDto> updateDayWise(@PathVariable UUID id, @RequestBody DayWiseDto dto) {
+        return new CustomResponse<>(HttpStatus.OK, "DayWise updated", customerService.updateDayWise(id, dto));
+    }
+
+    @DeleteMapping("/daywise/{id}")
+    public CustomResponse<String> deleteDayWise(@PathVariable UUID id) {
+        customerService.deleteDayWise(id);
+        return new CustomResponse<>(HttpStatus.OK, "DayWise deleted", null);
     }
 }

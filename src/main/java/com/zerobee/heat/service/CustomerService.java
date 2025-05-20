@@ -208,4 +208,48 @@ public class CustomerService {
 
         itineraryRepo.delete(itinerary);
     }
+
+    @Transactional
+    public DayWiseDto createDayWise(UUID itineraryId, DayWiseDto dto) {
+        Itinerary itinerary = itineraryRepo.findById(itineraryId)
+                .orElseThrow(() -> new ResourceNotFoundException("Itinerary not found"));
+
+        DayWise entity = dayWiseMapper.toEntity(dto);
+        entity.setItinerary(itinerary);
+        DayWise saved = dayWiseRepo.save(entity);
+        return dayWiseMapper.toDTO(saved);
+    }
+
+    public DayWiseDto getDayWiseById(UUID id) {
+        DayWise entity = dayWiseRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("DayWise not found"));
+        return dayWiseMapper.toDTO(entity);
+    }
+
+    @Transactional
+    public List<DayWiseDto> getDayWiseByItinerary(UUID itineraryId) {
+        return dayWiseRepo.findByItinerary_ItineraryId(itineraryId).stream()
+                .map(dayWiseMapper::toDTO)
+                .toList();
+    }
+
+    @Transactional
+    public DayWiseDto updateDayWise(UUID id, DayWiseDto dto) {
+        DayWise entity = dayWiseRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("DayWise not found"));
+
+        entity.setDate(dto.getDate());
+        entity.setDay(dto.getDay());
+        entity.setDestination(dto.getDestination());
+        entity.setNotes(dto.getNotes());
+
+        return dayWiseMapper.toDTO(dayWiseRepo.save(entity));
+    }
+
+    @Transactional
+    public void deleteDayWise(UUID id) {
+        DayWise entity = dayWiseRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("DayWise not found"));
+        dayWiseRepo.delete(entity);
+    }
 }
