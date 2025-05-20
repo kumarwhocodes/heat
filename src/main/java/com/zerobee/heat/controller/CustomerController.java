@@ -50,19 +50,19 @@ public class CustomerController {
         return new CustomResponse<>(HttpStatus.OK,"Itinerary Added",customerService.addItinerary(id,itineraryDto));
     }
 
-    @GetMapping("/{customerId}/itinerary/{itineraryId}")
-    public CustomResponse<ItineraryDto> getItinerary(@PathVariable String customerId, @PathVariable UUID itineraryId) {
-        return new CustomResponse<>(HttpStatus.OK, "Itinerary fetched", customerService.getItineraryById(customerId, itineraryId));
+    @GetMapping("/itinerary/{itineraryId}")
+    public CustomResponse<ItineraryDto> getItinerary(@PathVariable UUID itineraryId) {
+        return new CustomResponse<>(HttpStatus.OK, "Itinerary fetched", customerService.getItineraryById(itineraryId));
     }
 
-    @PutMapping("/{customerId}/itinerary/{itineraryId}")
-    public CustomResponse<ItineraryDto> updateItinerary(@PathVariable String customerId, @PathVariable UUID itineraryId, @RequestBody ItineraryDto dto) {
-        return new CustomResponse<>(HttpStatus.OK, "Itinerary updated", customerService.updateItinerary(customerId, itineraryId, dto));
+    @PutMapping("/itinerary/{itineraryId}")
+    public CustomResponse<ItineraryDto> updateItinerary(@PathVariable UUID itineraryId, @RequestBody ItineraryDto dto) {
+        return new CustomResponse<>(HttpStatus.OK, "Itinerary updated", customerService.updateItinerary(itineraryId, dto));
     }
 
-    @DeleteMapping("/{customerId}/itinerary/{itineraryId}")
-    public CustomResponse<String> deleteItinerary(@PathVariable String customerId, @PathVariable UUID itineraryId) {
-        customerService.deleteItinerary(customerId, itineraryId);
+    @DeleteMapping("/itinerary/{itineraryId}")
+    public CustomResponse<String> deleteItinerary(@PathVariable UUID itineraryId) {
+        customerService.deleteItinerary(itineraryId);
         return new CustomResponse<>(HttpStatus.OK, "Itinerary deleted successfully", null);
     }
 }

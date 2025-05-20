@@ -120,9 +120,14 @@ public class CustomerService {
 
     public void deleteCustomer(String id) {
 
-        if (!customerRepo.existsById(id)) {
-            throw new ResourceNotFoundException("Customer not found with id: " + id);
+        Customer customer = customerRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
+
+        for (Itinerary itinerary : customer.getItineraries()) {
+            dayWiseRepo.deleteAll(itinerary.getDayWiseList());
+            itineraryRepo.delete(itinerary);
         }
+
         customerRepo.deleteById(id);
     }
 
@@ -150,31 +155,19 @@ public class CustomerService {
         return itineraryMapper.toDTO(savedItinerary);
     }
 
-    public ItineraryDto getItineraryById(String customerId, UUID itineraryId) {
-        Customer customer = customerRepo.findById(customerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + customerId));
+    public ItineraryDto getItineraryById(UUID itineraryId) {
 
         Itinerary itinerary = itineraryRepo.findById(itineraryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Itinerary not found with id: " + itineraryId));
-
-        if (!itinerary.getCustomer().getCustomerId().equals(customer.getCustomerId())) {
-            throw new ConflictException("Itinerary does not belong to the specified customer");
-        }
 
         return itineraryMapper.toDTO(itinerary);
     }
 
     @Transactional
-    public ItineraryDto updateItinerary(String customerId, UUID itineraryId, ItineraryDto updatedDto) {
-        Customer customer = customerRepo.findById(customerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + customerId));
+    public ItineraryDto updateItinerary(UUID itineraryId, ItineraryDto updatedDto) {
 
         Itinerary itinerary = itineraryRepo.findById(itineraryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Itinerary not found with id: " + itineraryId));
-
-        if (!itinerary.getCustomer().getCustomerId().equals(customer.getCustomerId())) {
-            throw new ConflictException("Itinerary does not belong to the specified customer");
-        }
 
         // Update fields
         itinerary.setAgentName(updatedDto.getAgentName());
@@ -191,22 +184,23 @@ public class CustomerService {
         itinerary.setNoOfNights(updatedDto.getNoOfNights());
         itinerary.setArrival(updatedDto.getArrival());
 
+        //TODO: Not updating Properly
+        List<DayWise> dayWiseList = updatedDto.getDayWiseList()
+                .stream()
+                .map(dayWiseMapper::toEntity)
+                .toList();
+
+        itinerary.setDayWiseList(dayWiseList);
         Itinerary saved = itineraryRepo.save(itinerary);
 
         return itineraryMapper.toDTO(saved);
     }
 
     @Transactional
-    public void deleteItinerary(String customerId, UUID itineraryId) {
-        Customer customer = customerRepo.findById(customerId)
-                .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + customerId));
+    public void deleteItinerary(UUID itineraryId) {
 
         Itinerary itinerary = itineraryRepo.findById(itineraryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Itinerary not found with id: " + itineraryId));
-
-        if (!itinerary.getCustomer().getCustomerId().equals(customer.getCustomerId())) {
-            throw new ConflictException("Itinerary does not belong to the specified customer");
-        }
 
         // Delete related DayWise records
         List<DayWise> dayWiseList = dayWiseRepo.findByItinerary_ItineraryId(itineraryId);
