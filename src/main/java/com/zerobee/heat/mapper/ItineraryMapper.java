@@ -7,7 +7,7 @@ import com.zerobee.heat.entity.Itinerary;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = DayWiseMapper.class)
 public interface ItineraryMapper {
 
     ItineraryDto toDTO(Itinerary itinerary);

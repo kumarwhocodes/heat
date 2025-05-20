@@ -1,17 +1,14 @@
 package com.zerobee.heat.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @Builder
@@ -19,11 +16,12 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "itinerary")
+@ToString(exclude = {"customer", "dayWiseList"})
 public class Itinerary {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Integer itineraryId;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID itineraryId;
 
     private String agentName;
     private String agentEmail;
@@ -49,5 +47,5 @@ public class Itinerary {
 
     @OneToMany(mappedBy = "itinerary", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<DayWise> dayWiseList;
+    private List<DayWise> dayWiseList = new ArrayList<>();
 }

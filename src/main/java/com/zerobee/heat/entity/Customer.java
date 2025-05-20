@@ -2,10 +2,7 @@ package com.zerobee.heat.entity;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -17,8 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "customers")
+@ToString(exclude = "itineraries")
 public class Customer {
-    
+
     @Id
     private String customerId;
     private String clientName;
@@ -31,5 +29,5 @@ public class Customer {
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
-    private List<Itinerary> itineraries;
+    private List<Itinerary> itineraries = new ArrayList<>();
 }
