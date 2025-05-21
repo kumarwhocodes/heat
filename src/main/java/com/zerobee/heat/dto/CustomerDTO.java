@@ -18,7 +18,6 @@ public class CustomerDTO {
     private String nationality;
     private String clientEmergencyPhone;
     private String clientLanguage;
-    private String description;
 
-    private List<ItineraryDto> itineraries;
+    private List<ItineraryDTO> itineraries;
 }

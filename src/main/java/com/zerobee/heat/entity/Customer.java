@@ -1,14 +1,18 @@
 package com.zerobee.heat.entity;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,7 +20,7 @@ import java.util.List;
 @Table(name = "customers")
 @ToString(exclude = "itineraries")
 public class Customer {
-
+    
     @Id
     private String customerId;
     private String clientName;
@@ -25,9 +29,18 @@ public class Customer {
     private String nationality;
     private String clientEmergencyPhone;
     private String clientLanguage;
-    private String description;
-
+    
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonManagedReference
     private List<Itinerary> itineraries = new ArrayList<>();
+    
+    // Helper methods for managing bidirectional relationship
+    public void addItinerary(Itinerary itinerary) {
+        itineraries.add(itinerary);
+        itinerary.setCustomer(this);
+    }
+    
+    public void removeItinerary(Itinerary itinerary) {
+        itineraries.remove(itinerary);
+        itinerary.setCustomer(null);
+    }
 }

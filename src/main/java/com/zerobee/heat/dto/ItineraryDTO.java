@@ -10,7 +10,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ItineraryDto {
+public class ItineraryDTO {
     private UUID itineraryId;
 
     private String agentName;
@@ -30,5 +30,5 @@ public class ItineraryDto {
     private String noOfNights;
     private String arrival;
 
-    private List<DayWiseDto> dayWiseList;
+    private List<DayWiseDTO> dayWiseList;
 }

@@ -8,7 +8,7 @@ import java.util.UUID;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DayWiseDto {
+public class DayWiseDTO {
     private UUID dayWiseId;
     private String date;
     private String day;
