@@ -1,6 +1,7 @@
 package com.zerobee.heat.entity;
 
 import com.zerobee.heat.enums.ItineraryStatus;
+import com.zerobee.heat.enums.PencilBookingStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,6 +49,10 @@ public class Itinerary {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private ItineraryStatus status = ItineraryStatus.PENDING;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PencilBookingStatus pencilBooking;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id")

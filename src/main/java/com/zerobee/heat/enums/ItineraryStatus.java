@@ -4,7 +4,5 @@ public enum ItineraryStatus {
     PENDING,
     APPROVED,
     ONGOING,
-    COMPLETED,
-    RESERVED,
-    UNRESERVED
+    COMPLETED
 }

@@ -1,6 +1,7 @@
 package com.zerobee.heat.dto;
 
 import com.zerobee.heat.enums.ItineraryStatus;
+import com.zerobee.heat.enums.PencilBookingStatus;
 import lombok.*;
 
 import java.time.LocalDate;
@@ -33,5 +34,6 @@ public class ItineraryDTO {
 
     private ItineraryStatus status;
 
+    private PencilBookingStatus pencilBooking;
     private List<DayWiseDTO> dayWiseList;
 }

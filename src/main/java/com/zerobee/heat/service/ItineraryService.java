@@ -108,6 +108,7 @@ public class ItineraryService {
         if (updatedDto.getNoOfNights() != null) itinerary.setNoOfNights(updatedDto.getNoOfNights());
         if (updatedDto.getArrival() != null) itinerary.setArrival(updatedDto.getArrival());
         if (updatedDto.getStatus() != null) itinerary.setStatus(updatedDto.getStatus());
+        if (updatedDto.getPencilBooking() !=null) itinerary.setPencilBooking(updatedDto.getPencilBooking());
         
         // Save updated itinerary
         Itinerary saved = itineraryRepo.save(itinerary);
