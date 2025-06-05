@@ -1,32 +1,23 @@
 package com.zerobee.heat.dto;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.List;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 public class CustomerDTO {
 
-    private String id;
+    private String customerId;
 
-    @NotBlank(message = "Name is required")
-    private String name;
+    private String clientName;
+    private String clientEmail;
+    private String clientPhone;
+    private String nationality;
+    private String clientEmergencyPhone;
+    private String clientLanguage;
 
-    @NotNull(message = "Age is required")
-    private Integer age;
-
-    private String address;
-
-    private String phone;
-
-    @Email(message = "Email should be valid")
-    private String email;
+    private List<ItineraryDTO> itineraries;
 }

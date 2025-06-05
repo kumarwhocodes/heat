@@ -28,9 +28,9 @@ public class RoleInitializer implements CommandLineRunner {
         createRoleIfNotFound("USER");
         createRoleIfNotFound("ADMIN");
         createRoleIfNotFound("SALES");
-        createRoleIfNotFound("SALES_PARTNER");
+        createRoleIfNotFound("SALES_RESERVATION");
         createRoleIfNotFound("OPERATIONS");
-        createRoleIfNotFound("EXECUTION");
+        createRoleIfNotFound("FHE");
         createRoleIfNotFound("ACCOUNTS");
         
         // Create admin user if not exists

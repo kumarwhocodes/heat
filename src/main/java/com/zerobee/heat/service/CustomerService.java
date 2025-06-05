@@ -6,11 +6,12 @@ import com.zerobee.heat.exception.ConflictException;
 import com.zerobee.heat.exception.ResourceNotFoundException;
 import com.zerobee.heat.mapper.CustomerMapper;
 import com.zerobee.heat.repo.CustomerRepo;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,7 +21,7 @@ public class CustomerService {
     private final CustomerRepo customerRepo;
     private final CustomerMapper customerMapper;
     
-    public List<CustomerDTO> getAllCustomer() {
+    public List<CustomerDTO> getAllCustomers() {
         List<Customer> customers = customerRepo.findAll();
         return customers.stream()
                 .map(customerMapper::toDTO)
@@ -28,18 +29,39 @@ public class CustomerService {
     }
     
     public CustomerDTO getCustomerById(String id) {
-        Customer customer = customerRepo.findById(UUID.fromString(id))
+        Customer customer = customerRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
         return customerMapper.toDTO(customer);
     }
     
+    private String generateCustomerId() {
+        Optional<Customer> lastCustomer = customerRepo
+                .findTopByCustomerIdStartingWithOrderByCustomerIdDesc("CUST_");
+        
+        int nextNumber = 1;
+        if (lastCustomer.isPresent()) {
+            String lastId = lastCustomer.get().getCustomerId();
+            String numericPart = lastId.substring("CUST_".length());
+            nextNumber = Integer.parseInt(numericPart) + 1;
+        }
+        
+        return "CUST_" + String.format("%03d", nextNumber);
+    }
+    
+    @Transactional
     public CustomerDTO createCustomer(CustomerDTO customerDTO) {
-        if (customerRepo.existsByPhone(customerDTO.getPhone())) {
+        if (customerDTO.getClientPhone() != null && customerRepo.existsByClientPhone(customerDTO.getClientPhone())) {
             throw new ConflictException("Customer with phone number already exists!");
         }
-        if (customerRepo.existsByEmail(customerDTO.getEmail())) {
+        
+        if (customerDTO.getClientEmail() != null && customerRepo.existsByClientEmail(customerDTO.getClientEmail())) {
             throw new ConflictException("Customer with email id already exists!");
         }
+        
+        // Generate customer ID
+        String newCustomerId = generateCustomerId();
+        customerDTO.setCustomerId(newCustomerId);
+        
         Customer customer = customerMapper.toEntity(customerDTO);
         Customer savedCustomer = customerRepo.save(customer);
         
@@ -47,26 +69,39 @@ public class CustomerService {
     }
     
     public CustomerDTO updateCustomer(String id, CustomerDTO customerDTO) {
-        
-        Customer existingCustomer = customerRepo.findById(UUID.fromString(id))
+        Customer existingCustomer = customerRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Customer not found with id: " + id));
         
-        if (customerDTO.getName() != null) existingCustomer.setName(customerDTO.getName());
-        if (customerDTO.getAddress() != null) existingCustomer.setAddress(customerDTO.getAddress());
-        if (customerDTO.getEmail() != null) existingCustomer.setEmail(customerDTO.getEmail());
-        if (customerDTO.getPhone() != null) existingCustomer.setPhone(customerDTO.getPhone());
-        if (customerDTO.getAge() != null) existingCustomer.setAge(customerDTO.getAge());
-        Customer updatedCustomer = customerRepo.save(existingCustomer);
+        if (customerDTO.getClientPhone() != null &&
+                !customerDTO.getClientPhone().equals(existingCustomer.getClientPhone()) &&
+                customerRepo.existsByClientPhone(customerDTO.getClientPhone())) {
+            throw new ConflictException("Customer with phone number already exists!");
+        }
         
+        if (customerDTO.getClientEmail() != null &&
+                !customerDTO.getClientEmail().equals(existingCustomer.getClientEmail()) &&
+                customerRepo.existsByClientEmail(customerDTO.getClientEmail())) {
+            throw new ConflictException("Customer with email id already exists!");
+        }
+        
+        if (customerDTO.getClientName() != null) existingCustomer.setClientName(customerDTO.getClientName());
+        if (customerDTO.getClientEmail() != null) existingCustomer.setClientEmail(customerDTO.getClientEmail());
+        if (customerDTO.getClientPhone() != null) existingCustomer.setClientPhone(customerDTO.getClientPhone());
+        if (customerDTO.getNationality() != null) existingCustomer.setNationality(customerDTO.getNationality());
+        if (customerDTO.getClientEmergencyPhone() != null)
+            existingCustomer.setClientEmergencyPhone(customerDTO.getClientEmergencyPhone());
+        if (customerDTO.getClientLanguage() != null)
+            existingCustomer.setClientLanguage(customerDTO.getClientLanguage());
+        
+        Customer updatedCustomer = customerRepo.save(existingCustomer);
         return customerMapper.toDTO(updatedCustomer);
     }
     
+    @Transactional
     public void deleteCustomer(String id) {
-        
-        if (!customerRepo.existsById(UUID.fromString(id))) {
+        if (!customerRepo.existsById(id)) {
             throw new ResourceNotFoundException("Customer not found with id: " + id);
         }
-        customerRepo.deleteById(UUID.fromString(id));
+        customerRepo.deleteById(id);
     }
-    
 }

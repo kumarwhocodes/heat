@@ -4,7 +4,7 @@ import com.zerobee.heat.dto.CustomerDTO;
 import com.zerobee.heat.entity.Customer;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",uses = ItineraryMapper.class)
 public interface CustomerMapper {
 
     CustomerDTO toDTO(Customer customer);

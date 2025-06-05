@@ -3,29 +3,44 @@ package com.zerobee.heat.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-import java.util.UUID;
+import java.util.ArrayList;
+import java.util.List;
 
-@Data
+@Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "customers")
+@ToString(exclude = "itineraries")
 public class Customer {
-
+    
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
-
-    @Column(nullable = false)
-    private String name;
-
-    private Integer age;
-    private String address;
-    private String phone;
-    private String email;
-
+    private String customerId;
+    private String clientName;
+    private String clientEmail;
+    private String clientPhone;
+    private String nationality;
+    private String clientEmergencyPhone;
+    private String clientLanguage;
+    
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Itinerary> itineraries = new ArrayList<>();
+    
+    // Helper methods for managing bidirectional relationship
+    public void addItinerary(Itinerary itinerary) {
+        itineraries.add(itinerary);
+        itinerary.setCustomer(this);
+    }
+    
+    public void removeItinerary(Itinerary itinerary) {
+        itineraries.remove(itinerary);
+        itinerary.setCustomer(null);
+    }
 }
