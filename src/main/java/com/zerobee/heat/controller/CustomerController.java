@@ -23,7 +23,7 @@ public class CustomerController {
     }
     
     @GetMapping("/{id}")
-    public CustomResponse<CustomerDTO> getCustomer(@PathVariable String id) {
+    public CustomResponse<CustomerDTO> getCustomerByID(@PathVariable String id) {
         return new CustomResponse<>(HttpStatus.OK, "Customer fetched", customerService.getCustomerById(id));
     }
     
