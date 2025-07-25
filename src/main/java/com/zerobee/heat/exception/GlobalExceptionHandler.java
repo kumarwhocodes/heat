@@ -20,6 +20,37 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     
+    //Email Exceptions
+    @ExceptionHandler(EmailConnectionException.class)
+    public ResponseEntity<CustomResponse<Void>> handleEmailConnectionException(EmailConnectionException ex) {
+        return ResponseEntity
+                .status(HttpStatus.SERVICE_UNAVAILABLE)
+                .body(new CustomResponse<>(HttpStatus.SERVICE_UNAVAILABLE,
+                        "Email service temporarily unavailable: " + ex.getMessage(), null));
+    }
+    
+    @ExceptionHandler(EmailProcessingException.class)
+    public ResponseEntity<CustomResponse<Void>> handleEmailProcessingException(EmailProcessingException ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(new CustomResponse<>(HttpStatus.INTERNAL_SERVER_ERROR,
+                        "Error processing emails: " + ex.getMessage(), null));
+    }
+    
+    @ExceptionHandler(EmailNotFoundException.class)
+    public ResponseEntity<CustomResponse<Void>> handleEmailNotFoundException(EmailNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new CustomResponse<>(HttpStatus.NOT_FOUND, ex.getMessage(), null));
+    }
+    
+    @ExceptionHandler(FolderNotFoundException.class)
+    public ResponseEntity<CustomResponse<Void>> handleFolderNotFoundException(FolderNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new CustomResponse<>(HttpStatus.NOT_FOUND, ex.getMessage(), null));
+    }
+    
     //JWTs Exception
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<CustomResponse<Void>> handleExpiredJwtException(ExpiredJwtException ex) {

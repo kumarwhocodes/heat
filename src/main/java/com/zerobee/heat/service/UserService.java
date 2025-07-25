@@ -11,7 +11,6 @@ import com.zerobee.heat.exception.ResourceNotFoundException;
 import com.zerobee.heat.mapper.UserMapper;
 import com.zerobee.heat.repo.RoleRepo;
 import com.zerobee.heat.repo.UserRepo;
-import com.zerobee.heat.utils.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -37,7 +36,7 @@ public class UserService implements UserDetailsService {
     private final UserMapper userMapper;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final EmailService emailService;
+    private final EmailServiceSMTP emailServiceSMTP;
     
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -96,7 +95,7 @@ public class UserService implements UserDetailsService {
         user.setRoles(roles);
         
         User savedUser = userRepo.save(user);
-        emailService.sendWelcomeEmail(userMapper.toDTO(savedUser), password);
+        emailServiceSMTP.sendWelcomeEmail(userMapper.toDTO(savedUser), password);
         return userMapper.toDTO(savedUser);
     }
     

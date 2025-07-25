@@ -63,6 +63,11 @@ dependencies {
 
 	// Thymeleaf
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf:3.4.5")
+
+	// For receiving emails
+	implementation("org.springframework.boot:spring-boot-starter-integration")
+	implementation("org.springframework.integration:spring-integration-mail")
+
 }
 
 tasks.withType<Test> {

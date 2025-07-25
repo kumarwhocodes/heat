@@ -49,9 +49,9 @@ public class RoleInitializer implements CommandLineRunner {
         if (!userRepo.existsByEmail("admin@heat.com")) {
             // Create admin user
             User adminUser = new User();
-            adminUser.setId("HEAT001");
+            adminUser.setId("ADMIN001");
             adminUser.setEmail("admin@heat.com");
-            adminUser.setName("APNA ADMIN");
+            adminUser.setName("DRISHTI DI KE PAPA");
             adminUser.setPassword(passwordEncoder.encode("admin123"));
             
             // Assign ADMIN role
