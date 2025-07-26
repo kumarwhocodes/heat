@@ -88,8 +88,8 @@ public class CustomerService {
         if (customerDTO.getClientEmail() != null) existingCustomer.setClientEmail(customerDTO.getClientEmail());
         if (customerDTO.getClientPhone() != null) existingCustomer.setClientPhone(customerDTO.getClientPhone());
         if (customerDTO.getNationality() != null) existingCustomer.setNationality(customerDTO.getNationality());
-        if (customerDTO.getClientEmergencyPhone() != null)
-            existingCustomer.setClientEmergencyPhone(customerDTO.getClientEmergencyPhone());
+        if (customerDTO.getClientAlternatePhone() != null)
+            existingCustomer.setClientAlternatePhone(customerDTO.getClientAlternatePhone());
         if (customerDTO.getClientLanguage() != null)
             existingCustomer.setClientLanguage(customerDTO.getClientLanguage());
         

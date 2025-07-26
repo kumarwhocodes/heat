@@ -1,5 +1,6 @@
 package com.zerobee.heat.dto;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.List;
@@ -11,12 +12,17 @@ import java.util.List;
 public class CustomerDTO {
 
     private String customerId;
-
+    
+    @NotNull
     private String clientName;
+    @NotNull
     private String clientEmail;
+    @NotNull
     private String clientPhone;
+    @NotNull
     private String nationality;
-    private String clientEmergencyPhone;
+    @NotNull
+    private String clientAlternatePhone;
     private String clientLanguage;
 
     private List<ItineraryDTO> itineraries;

@@ -27,7 +27,7 @@ public class Customer {
     private String clientEmail;
     private String clientPhone;
     private String nationality;
-    private String clientEmergencyPhone;
+    private String clientAlternatePhone;
     private String clientLanguage;
     
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
