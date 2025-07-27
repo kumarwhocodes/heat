@@ -36,7 +36,7 @@ public class GmailService {
         this.flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JacksonFactory.getDefaultInstance(),
                 clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new File(TOKENS_DIRECTORY_PATH)))
+                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
                 .setAccessType("offline")
                 .build();
     }
@@ -68,5 +68,12 @@ public class GmailService {
                     .setApplicationName(APPLICATION_NAME).build();
         }
         return this.gmailService;
+    }
+
+    public void clearCredentials() throws Exception {
+        initFlow();
+        flow.getCredentialDataStore().delete("user");
+        this.credential = null;
+        this.gmailService = null;
     }
 }

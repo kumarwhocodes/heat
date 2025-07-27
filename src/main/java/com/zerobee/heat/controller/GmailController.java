@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
-@Slf4j
 @RestController
 @RequestMapping("/api/gmail")
 @CrossOrigin(origins = "*")
@@ -68,34 +67,16 @@ public class GmailController {
                     emailInfo.put("date", header.getValue());
                 }
             }
-            // Extract body
-            String body = getEmailBody(fullMessage.getPayload());
-            emailInfo.put("body", body);
-            log.info("Email fetched: {}", emailInfo);
+
+            // Extract body content
+            String body = extractBody(fullMessage.getPayload());
+            emailInfo.put("body", body != null ? body : "No body content");
+
+            System.out.println("Email Info: " + emailInfo);
+
             emails.add(emailInfo);
         }
         return emails;
-    }
-
-    private String getEmailBody(MessagePart payload) {
-        String body = "";
-
-        if (payload.getBody() != null && payload.getBody().getData() != null) {
-            body = new String(Base64.getUrlDecoder().decode(payload.getBody().getData()));
-        }
-
-        if (payload.getParts() != null) {
-            for (MessagePart part : payload.getParts()) {
-                if ("text/plain".equals(part.getMimeType()) || "text/html".equals(part.getMimeType())) {
-                    if (part.getBody() != null && part.getBody().getData() != null) {
-                        body = new String(Base64.getUrlDecoder().decode(part.getBody().getData()));
-                        break;
-                    }
-                }
-            }
-        }
-
-        return body;
     }
 
     @PostMapping("/send")
@@ -105,6 +86,16 @@ public class GmailController {
         Message msg = createMessageWithEmail(message);
         gmail.users().messages().send("me", msg).execute();
         return ResponseEntity.ok(Map.of("status", "sent"));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout() {
+        try {
+            gmailService.clearCredentials();
+            return ResponseEntity.ok(Map.of("status", "logged out"));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(Map.of("error", e.getMessage()));
+        }
     }
 
     // Utility methods
@@ -128,5 +119,18 @@ public class GmailController {
         Message message = new Message();
         message.setRaw(encodedEmail);
         return message;
+    }
+
+    private String extractBody(MessagePart payload) {
+        if (payload.getBody() != null && payload.getBody().getData() != null) {
+            return new String(Base64.getUrlDecoder().decode(payload.getBody().getData()));
+        }
+        if (payload.getParts() != null) {
+            for (MessagePart part : payload.getParts()) {
+                String body = extractBody(part);
+                if (body != null) return body;
+            }
+        }
+        return null;
     }
 }
