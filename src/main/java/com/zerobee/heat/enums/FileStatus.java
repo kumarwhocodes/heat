@@ -1,6 +1,6 @@
 package com.zerobee.heat.enums;
 
-public enum ItineraryStatus {
+public enum FileStatus {
     PENDING,
     APPROVED,
     ONGOING,

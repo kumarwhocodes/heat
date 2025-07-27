@@ -54,6 +54,8 @@ public class RoleInitializer implements CommandLineRunner {
             adminUser.setName("DRISHTI DI KE PAPA");
             adminUser.setPassword(passwordEncoder.encode("admin123"));
             
+           
+            
             // Assign ADMIN role
             Set<Role> roles = new HashSet<>();
             roleRepo.findByNameIgnoreCase("ADMIN").ifPresent(roles::add);
@@ -62,5 +64,24 @@ public class RoleInitializer implements CommandLineRunner {
             
             userRepo.save(adminUser);
         }
+        
+        if (!userRepo.existsByEmail("sales@heat.com")) {
+            // Create admin user
+            User salesUser = new User();
+            salesUser.setId("SALES001");
+            salesUser.setEmail("sales@heat.com");
+            salesUser.setName("SALES KA BAAP");
+            salesUser.setPassword(passwordEncoder.encode("sales123"));
+            
+            // Assign ADMIN role
+            Set<Role> roles = new HashSet<>();
+            roleRepo.findByNameIgnoreCase("SALES").ifPresent(roles::add);
+            roleRepo.findByNameIgnoreCase("USER").ifPresent(roles::add);
+            salesUser.setRoles(roles);
+            
+            userRepo.save(salesUser);
+        }
     }
+    
+    
 }

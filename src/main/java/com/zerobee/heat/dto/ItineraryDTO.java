@@ -1,6 +1,6 @@
 package com.zerobee.heat.dto;
 
-import com.zerobee.heat.enums.ItineraryStatus;
+import com.zerobee.heat.enums.FileStatus;
 import com.zerobee.heat.enums.PencilBookingStatus;
 import lombok.*;
 
@@ -31,9 +31,5 @@ public class ItineraryDTO {
     private String noOfDays;
     private String noOfNights;
     private String arrival;
-
-    private ItineraryStatus status;
-
-    private PencilBookingStatus pencilBooking;
     private List<DayWiseDTO> dayWiseList;
 }

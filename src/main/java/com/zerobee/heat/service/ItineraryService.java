@@ -4,7 +4,7 @@ import com.zerobee.heat.dto.ItineraryDTO;
 import com.zerobee.heat.entity.Customer;
 import com.zerobee.heat.entity.DayWise;
 import com.zerobee.heat.entity.Itinerary;
-import com.zerobee.heat.enums.ItineraryStatus;
+import com.zerobee.heat.enums.FileStatus;
 import com.zerobee.heat.exception.ResourceNotFoundException;
 import com.zerobee.heat.mapper.DayWiseMapper;
 import com.zerobee.heat.mapper.ItineraryMapper;
@@ -62,9 +62,6 @@ public class ItineraryService {
         
         // Set customer reference
         itinerary.setCustomer(customer);
-
-        // Set default status
-        itinerary.setStatus(ItineraryStatus.PENDING);
         
         // Save the itinerary
         Itinerary savedItinerary = itineraryRepo.save(itinerary);
@@ -107,8 +104,6 @@ public class ItineraryService {
         if (updatedDto.getNoOfDays() != null) itinerary.setNoOfDays(updatedDto.getNoOfDays());
         if (updatedDto.getNoOfNights() != null) itinerary.setNoOfNights(updatedDto.getNoOfNights());
         if (updatedDto.getArrival() != null) itinerary.setArrival(updatedDto.getArrival());
-        if (updatedDto.getStatus() != null) itinerary.setStatus(updatedDto.getStatus());
-        if (updatedDto.getPencilBooking() !=null) itinerary.setPencilBooking(updatedDto.getPencilBooking());
         
         // Save updated itinerary
         Itinerary saved = itineraryRepo.save(itinerary);
