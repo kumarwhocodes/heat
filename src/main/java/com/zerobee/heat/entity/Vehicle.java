@@ -24,7 +24,7 @@ public class Vehicle {
     private String vehicle_reg_no;
     private String name;
     private String category;
-    private String star;
+    private String grades;
     private LocalDate pollution_end_date;
     private LocalDate insurance_end_date;
     private LocalDate start_date;

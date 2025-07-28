@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,12 +18,21 @@ public class VehicleController {
 
     private final VehicleService vehicleService;
 
-    @GetMapping
+    @GetMapping("/")
     public CustomResponse<List<VehicleDTO>> getAllVehicles() {
         return new CustomResponse<>(HttpStatus.OK, "All Vehiches fetched.", vehicleService.getAllVehicles());
     }
 
-    @PostMapping
+    @GetMapping("/{id}")
+    public CustomResponse<VehicleDTO> getVehicleById(@PathVariable UUID id) {
+        return new CustomResponse<>(
+                HttpStatus.OK,
+                "Vehicle By Id" + id + "Fetched",
+                vehicleService.getVehicleById(id)
+        );
+    }
+
+    @PostMapping("/")
     public CustomResponse<VehicleDTO> addVehicle(@Valid @RequestBody VehicleDTO vehicleDTO) {
         return new CustomResponse<>(HttpStatus.CREATED, "Vehicle Added", vehicleService.addVehicle(vehicleDTO));
     }

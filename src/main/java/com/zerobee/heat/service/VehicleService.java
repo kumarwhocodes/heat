@@ -26,6 +26,12 @@ public class VehicleService {
                 .collect(Collectors.toList());
     }
 
+    public VehicleDTO getVehicleById(UUID id) {
+        Vehicle vehicle = vehicleRepo.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found with id: " + id));
+        return vehicleMapper.toDTO(vehicle);
+    }
+
     @Transactional
     public VehicleDTO addVehicle(VehicleDTO vehicleDTO) {
         Vehicle vehicle = vehicleMapper.toEntity(vehicleDTO);
@@ -42,7 +48,7 @@ public class VehicleService {
         if (vehicleDTO.getVehicle_reg_no() != null) existingVehicle.setVehicle_reg_no(vehicleDTO.getVehicle_reg_no());
         if (vehicleDTO.getName() != null) existingVehicle.setName(vehicleDTO.getName());
         if (vehicleDTO.getCategory() != null) existingVehicle.setCategory(vehicleDTO.getCategory());
-        if (vehicleDTO.getStar() != null) existingVehicle.setStar(vehicleDTO.getStar());
+        if (vehicleDTO.getGrades() != null) existingVehicle.setGrades(vehicleDTO.getGrades());
         if (vehicleDTO.getPollution_end_date() != null) existingVehicle.setPollution_end_date(vehicleDTO.getPollution_end_date());
         if (vehicleDTO.getInsurance_end_date() != null) existingVehicle.setInsurance_end_date(vehicleDTO.getInsurance_end_date());
         if (vehicleDTO.getStart_date() != null) existingVehicle.setStart_date(vehicleDTO.getStart_date());
