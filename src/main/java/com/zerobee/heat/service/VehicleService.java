@@ -44,15 +44,15 @@ public class VehicleService {
         Vehicle existingVehicle = vehicleRepo.findById(UUID.fromString(id))
                 .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found with id: " + id));
 
-        if (vehicleDTO.getVehicle_no() != null) existingVehicle.setVehicle_no(vehicleDTO.getVehicle_no());
+        // Update only if fields are non-null/being changed
         if (vehicleDTO.getVehicle_reg_no() != null) existingVehicle.setVehicle_reg_no(vehicleDTO.getVehicle_reg_no());
         if (vehicleDTO.getName() != null) existingVehicle.setName(vehicleDTO.getName());
         if (vehicleDTO.getCategory() != null) existingVehicle.setCategory(vehicleDTO.getCategory());
         if (vehicleDTO.getGrades() != null) existingVehicle.setGrades(vehicleDTO.getGrades());
         if (vehicleDTO.getPollution_end_date() != null) existingVehicle.setPollution_end_date(vehicleDTO.getPollution_end_date());
         if (vehicleDTO.getInsurance_end_date() != null) existingVehicle.setInsurance_end_date(vehicleDTO.getInsurance_end_date());
-        if (vehicleDTO.getStart_date() != null) existingVehicle.setStart_date(vehicleDTO.getStart_date());
-        if (vehicleDTO.getEnd_date() != null) existingVehicle.setEnd_date(vehicleDTO.getEnd_date());
+        if (vehicleDTO.getBooking_start_date() != null) existingVehicle.setBooking_start_date(vehicleDTO.getBooking_start_date());
+        if (vehicleDTO.getBooking_end_date() != null) existingVehicle.setBooking_end_date(vehicleDTO.getBooking_end_date());
         if (vehicleDTO.getChallan_check() != null) existingVehicle.setChallan_check(vehicleDTO.getChallan_check());
         if (vehicleDTO.getAvailability() != null) existingVehicle.setAvailability(vehicleDTO.getAvailability());
 

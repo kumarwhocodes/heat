@@ -14,15 +14,14 @@ import java.time.LocalDate;
 public class VehicleDTO {
 
     private String id;
-    private String vehicle_no;
     private String vehicle_reg_no;
     private String name;
     private String category;
     private String grades;
     private LocalDate pollution_end_date;
     private LocalDate insurance_end_date;
-    private LocalDate start_date;
-    private LocalDate end_date;
+    private LocalDate booking_start_date;
+    private LocalDate booking_end_date;
     private Boolean challan_check;
     private Boolean availability;
 

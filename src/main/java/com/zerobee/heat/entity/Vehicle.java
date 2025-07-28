@@ -20,15 +20,15 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    private String vehicle_no;
+    @Column(name = "vehicle_reg_no", nullable = false, unique = true)
     private String vehicle_reg_no;
     private String name;
     private String category;
     private String grades;
     private LocalDate pollution_end_date;
     private LocalDate insurance_end_date;
-    private LocalDate start_date;
-    private LocalDate end_date;
+    private LocalDate booking_start_date;
+    private LocalDate booking_end_date;
     private Boolean challan_check;
     private Boolean availability;
 
