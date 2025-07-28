@@ -21,4 +21,6 @@ public class CreateFileRequestDTO {
     
     private String customerId;
     private UUID itineraryId;
+    
+    private Boolean finalItineraryConfirmed;
 }

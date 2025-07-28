@@ -27,7 +27,7 @@ public class FileController {
     }
     
     @GetMapping("/{id}")
-    public CustomResponse<FileDTO> getFileById(@PathVariable Integer id) {
+    public CustomResponse<FileDTO> getFileById(@PathVariable UUID id) {
         return new CustomResponse<>(HttpStatus.OK, "File fetched", fileService.getFileById(id));
     }
     
@@ -77,12 +77,12 @@ public class FileController {
     }
     
     @PutMapping("/{id}")
-    public CustomResponse<FileDTO> updateFile(@PathVariable Integer id, @RequestBody FileDTO fileDTO) {
+    public CustomResponse<FileDTO> updateFile(@PathVariable UUID id, @RequestBody FileDTO fileDTO) {
         return new CustomResponse<>(HttpStatus.OK, "File updated", fileService.updateFile(id, fileDTO));
     }
     
     @DeleteMapping("/{id}")
-    public CustomResponse<Void> deleteFile(@PathVariable Integer id) {
+    public CustomResponse<Void> deleteFile(@PathVariable UUID id) {
         fileService.deleteFile(id);
         return new CustomResponse<>(HttpStatus.NO_CONTENT, "File deleted", null);
     }

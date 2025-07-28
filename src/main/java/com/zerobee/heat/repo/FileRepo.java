@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface FileRepo extends JpaRepository<File, Integer> {
+public interface FileRepo extends JpaRepository<File, UUID> {
     
     // Find files by status
     List<File> findByStatus(FileStatus status);
@@ -38,7 +38,7 @@ public interface FileRepo extends JpaRepository<File, Integer> {
     
     // Custom query to find files with complete details
     @Query("SELECT f FROM File f LEFT JOIN FETCH f.customer LEFT JOIN FETCH f.itinerary WHERE f.id = :id")
-    Optional<File> findByIdWithDetails(@Param("id") Integer id);
+    Optional<File> findByIdWithDetails(@Param("id") UUID id);
     
     // Find all files with their related entities
     @Query("SELECT f FROM File f LEFT JOIN FETCH f.customer LEFT JOIN FETCH f.itinerary")

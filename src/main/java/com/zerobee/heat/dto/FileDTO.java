@@ -7,12 +7,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class FileDTO {
-    private Integer id;
+    private UUID id;
     private PencilBookingStatus pencilBooking;
     private FileStatus status;
     private Boolean isMature;
@@ -20,6 +22,8 @@ public class FileDTO {
     
     private CustomerDTO customer;
     private ItineraryDTO itinerary;
+    
+    private Boolean finalItineraryConfirmed;
 }
 
 

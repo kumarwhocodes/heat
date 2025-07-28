@@ -1,5 +1,6 @@
 package com.zerobee.heat.entity;
 
+import com.zerobee.heat.enums.FileStage;
 import com.zerobee.heat.enums.FileStatus;
 import com.zerobee.heat.enums.PencilBookingStatus;
 import jakarta.persistence.*;
@@ -8,6 +9,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -19,8 +22,8 @@ import java.util.UUID;
 public class File {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -47,4 +50,38 @@ public class File {
     private Customer customer;
     
     private String fheId;
+    
+    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Reservation> reservations = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Payment> payments = new ArrayList<>();
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private FileStage stage; // SALES, OPERATIONS, CLOSED, DEAD
+    
+    @Column(nullable = false)
+    private Boolean finalItineraryConfirmed;
+    
+    public void addReservation(Reservation reservation) {
+        reservations.add(reservation);
+        reservation.setFile(this);
+    }
+    
+    public void removeReservation(Reservation reservation) {
+        reservations.remove(reservation);
+        reservation.setFile(null);
+    }
+    
+    public void addPayment(Payment payment) {
+        payments.add(payment);
+        payment.setFile(this);
+    }
+    
+    public void removePayment(Payment payment) {
+        payments.remove(payment);
+        payment.setFile(null);
+    }
+    
 }

@@ -41,7 +41,7 @@ public class FileService {
                 .collect(Collectors.toList());
     }
     
-    public FileDTO getFileById(Integer id) {
+    public FileDTO getFileById(UUID id) {
         File file = fileRepo.findByIdWithDetails(id)
                 .orElseThrow(() -> new ResourceNotFoundException("File not found with id: " + id));
         return fileMapper.toDTO(file);
@@ -107,6 +107,7 @@ public class FileService {
                 .fheId(request.getFheId())
                 .customerId(request.getCustomerId())    // Store ID internally
                 .itineraryId(request.getItineraryId())  // Store ID internally
+                .finalItineraryConfirmed(request.getFinalItineraryConfirmed())
                 .build();
         
         File savedFile = fileRepo.save(file);
@@ -120,12 +121,13 @@ public class FileService {
                 .fheId(savedFile.getFheId())
                 .customer(customerMapper.toDTO(customer))        // Full CustomerDTO
                 .itinerary(itineraryMapper.toDTO(itinerary))     // Full ItineraryDTO
+                .finalItineraryConfirmed(savedFile.getFinalItineraryConfirmed())
                 .build();
     }
     
     
     @Transactional
-    public FileDTO updateFile(Integer id, FileDTO fileDTO) {
+    public FileDTO updateFile(UUID id, FileDTO fileDTO) {
         File existingFile = fileRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("File not found with id: " + id));
         
@@ -151,7 +153,7 @@ public class FileService {
     }
     
     @Transactional
-    public void deleteFile(Integer id) {
+    public void deleteFile(UUID id) {
         if (!fileRepo.existsById(id)) {
             throw new ResourceNotFoundException("File not found with id: " + id);
         }
