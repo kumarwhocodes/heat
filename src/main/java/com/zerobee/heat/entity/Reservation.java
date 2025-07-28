@@ -37,7 +37,7 @@ public class Reservation {
     private Double price;
     
     @Enumerated(EnumType.STRING)
-    private ReservationStatus status; // PENDING, CONFIRMED, CANCELLED
+    private ReservationStatus status;
     
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
