@@ -27,9 +27,6 @@ public class Driver {
     private String experienceYears;
     private Boolean isAvailable;
     private String grades;
-
-    @OneToOne()
-    @JoinColumn(name = "id")
-    private Vehicle vehicle;
+    private String vehicleId;
 
 }

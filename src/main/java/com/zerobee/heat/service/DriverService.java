@@ -40,18 +40,7 @@ public class DriverService {
     }
 
     public DriverDTO createDriver(DriverDTO dto) {
-        System.out.println("DTO: " + dto);
         Driver driver = driverMapper.toEntity(dto);
-        System.out.println("Mapped entity: " + driver.getVehicle().getVehicle_reg_no());
-        if(driver.getVehicle().getVehicle_reg_no() == null){
-            driver.setVehicle(null);
-        }
-//        if (dto.getVehicle() != null && dto.getVehicle().getId() != null) {
-//            UUID vehicleId = UUID.fromString(dto.getVehicle().getId());
-//            Vehicle vehicle = vehicleRepo.findById(vehicleId)
-//                    .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found with ID: " + vehicleId));
-//            driver.setVehicle(vehicle);
-//        }
         Driver saved = repo.save(driver);
         return driverMapper.toDTO(saved);
     }
@@ -69,7 +58,6 @@ public class DriverService {
         if (dto.getExperienceYears() != null) driver.setExperienceYears(dto.getExperienceYears());
         if (dto.getIsAvailable() != null) driver.setIsAvailable(dto.getIsAvailable());
         if (dto.getGrades() != null) driver.setGrades(dto.getGrades());
-        if (dto.getVehicle() != null) driver.setVehicle(vehicleMapper.toEntity(dto.getVehicle()));
 
         Driver saved = repo.save(driver);
 

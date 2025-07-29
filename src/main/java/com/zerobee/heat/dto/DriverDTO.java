@@ -23,5 +23,5 @@ public class DriverDTO {
     private String experienceYears;
     private Boolean isAvailable;
     private String grades;
-    private VehicleDTO vehicle;
+    private String vehicleId;
 }
