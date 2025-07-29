@@ -34,6 +34,7 @@ public class Place {
 
     private String closedOn;
     private boolean requiresPermit;
+    @ElementCollection
     private List<String> permitDetails;
 
     private boolean isActive = true;

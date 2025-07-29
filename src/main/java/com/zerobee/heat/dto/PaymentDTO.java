@@ -1,5 +1,6 @@
 package com.zerobee.heat.dto;
 
+import com.zerobee.heat.entity.File;
 import com.zerobee.heat.enums.PaymentStatus;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,7 +16,7 @@ import java.util.UUID;
 @NoArgsConstructor
 public class PaymentDTO {
 
-    private UUID id;
+    private String id;
     private Double amount;
     private LocalDate paymentDate;
     private LocalDate dueDate;
@@ -25,5 +26,7 @@ public class PaymentDTO {
     private String mode;          // CASH, CREDIT CARD, BANK TRANSFER
     private String transactionId;
 
-    private UUID fileId;
+    private String customerId;
+
+    private FileDTO file;
 }

@@ -30,5 +30,5 @@ public class ReservationDTO {
 
     private ReservationStatus status;   // PENCIL_BOOKED, CONFIRMED, CANCELLED
 
-    private UUID fileId;
+    private FileDTO file;
 }

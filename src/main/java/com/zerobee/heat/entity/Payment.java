@@ -30,9 +30,11 @@ public class Payment {
     private PaymentStatus status;
     
     private String mode;
-    
+
     private String transactionId;
-    
+
+    private String customerId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "file_id")
     private File file;
