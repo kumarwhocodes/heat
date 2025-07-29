@@ -18,8 +18,6 @@ import java.util.UUID;
 public class Vehicle {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
     @Column(name = "vehicle_reg_no", nullable = false, unique = true)
     private String vehicle_reg_no;
     private String name;

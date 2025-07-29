@@ -42,8 +42,8 @@ public class DriverService {
     public DriverDTO createDriver(DriverDTO dto) {
         System.out.println("DTO: " + dto);
         Driver driver = driverMapper.toEntity(dto);
-        System.out.println("Mapped entity: " + driver.getVehicle().getId());
-        if(driver.getVehicle().getId() == null){
+        System.out.println("Mapped entity: " + driver.getVehicle().getVehicle_reg_no());
+        if(driver.getVehicle().getVehicle_reg_no() == null){
             driver.setVehicle(null);
         }
 //        if (dto.getVehicle() != null && dto.getVehicle().getId() != null) {

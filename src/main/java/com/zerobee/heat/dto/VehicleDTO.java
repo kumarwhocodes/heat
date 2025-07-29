@@ -13,7 +13,6 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class VehicleDTO {
 
-    private String id;
     private String vehicle_reg_no;
     private String name;
     private String category;

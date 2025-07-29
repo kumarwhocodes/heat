@@ -8,9 +8,7 @@ import com.zerobee.heat.repo.VehicleRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,26 +24,29 @@ public class VehicleService {
                 .collect(Collectors.toList());
     }
 
-    public VehicleDTO getVehicleById(UUID id) {
-        Vehicle vehicle = vehicleRepo.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found with id: " + id));
+    public VehicleDTO getVehicleById(String regNo) {
+        Vehicle vehicle = vehicleRepo.findById(regNo)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found with registration no: " + regNo));
         return vehicleMapper.toDTO(vehicle);
     }
 
     @Transactional
     public VehicleDTO addVehicle(VehicleDTO vehicleDTO) {
+        // Optional: Check for duplicate reg no before saving
+        if (vehicleRepo.existsById(vehicleDTO.getVehicle_reg_no())) {
+            throw new IllegalArgumentException("Vehicle registration number already exists.");
+        }
         Vehicle vehicle = vehicleMapper.toEntity(vehicleDTO);
         Vehicle savedVehicle = vehicleRepo.save(vehicle);
         return vehicleMapper.toDTO(savedVehicle);
     }
 
     @Transactional
-    public VehicleDTO updateVehicle(String id, VehicleDTO vehicleDTO) {
-        Vehicle existingVehicle = vehicleRepo.findById(UUID.fromString(id))
-                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found with id: " + id));
+    public VehicleDTO updateVehicle(String regNo, VehicleDTO vehicleDTO) {
+        Vehicle existingVehicle = vehicleRepo.findById(regNo)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found with registration no: " + regNo));
 
-        // Update only if fields are non-null/being changed
-        if (vehicleDTO.getVehicle_reg_no() != null) existingVehicle.setVehicle_reg_no(vehicleDTO.getVehicle_reg_no());
+        // Since regNo is the ID, you can't change it - editing the PK is not supported
         if (vehicleDTO.getName() != null) existingVehicle.setName(vehicleDTO.getName());
         if (vehicleDTO.getCategory() != null) existingVehicle.setCategory(vehicleDTO.getCategory());
         if (vehicleDTO.getGrades() != null) existingVehicle.setGrades(vehicleDTO.getGrades());
@@ -61,10 +62,10 @@ public class VehicleService {
     }
 
     @Transactional
-    public VehicleDTO deleteVehicle(String id) {
-        Vehicle vehicle = vehicleRepo.findById(UUID.fromString(id))
-                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found with id: " + id));
+    public VehicleDTO deleteVehicle(String regNo) {
+        Vehicle vehicle = vehicleRepo.findById(regNo)
+                .orElseThrow(() -> new ResourceNotFoundException("Vehicle not found with registration no: " + regNo));
         vehicleRepo.delete(vehicle);
-        return vehicleMapper.toDTO(vehicle); // Optionally return the deleted entity
+        return vehicleMapper.toDTO(vehicle);
     }
 }
