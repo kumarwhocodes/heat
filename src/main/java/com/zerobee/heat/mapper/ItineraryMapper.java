@@ -8,6 +8,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring",uses = DayWiseMapper.class)
 public interface ItineraryMapper {
 
+    @Mapping(target = "customerId", source = "customer.customerId")
     ItineraryDTO toDTO(Itinerary itinerary);
 
     @Mapping(target = "customer", ignore = true)

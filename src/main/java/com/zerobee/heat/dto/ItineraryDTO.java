@@ -14,6 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ItineraryDTO {
     private UUID itineraryId;
+    private String customerId;
 
     private String agentName;
     private String agentEmail;
