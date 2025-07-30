@@ -31,7 +31,7 @@ public class UserController {
     }
     
     @GetMapping()
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public CustomResponse<List<UserDTO>> getAllUsers() {
         return new CustomResponse<>(HttpStatus.OK, "All users fetched", userService.getAllUsers());
     }
