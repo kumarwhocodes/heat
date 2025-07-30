@@ -107,6 +107,7 @@ public class FileService {
                 .fheId(request.getFheId())
                 .customerId(request.getCustomerId())    // Store ID internally
                 .itineraryId(request.getItineraryId())  // Store ID internally
+                .stage(request.getStage())
                 .finalItineraryConfirmed(request.getFinalItineraryConfirmed())
                 .build();
         

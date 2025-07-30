@@ -64,24 +64,24 @@ public class File {
     @Column(nullable = false)
     private Boolean finalItineraryConfirmed;
     
-    public void addReservation(Reservation reservation) {
-        reservations.add(reservation);
-        reservation.setFile(this);
-    }
-    
-    public void removeReservation(Reservation reservation) {
-        reservations.remove(reservation);
-        reservation.setFile(null);
-    }
-    
-    public void addPayment(Payment payment) {
-        payments.add(payment);
-        payment.setFile(this);
-    }
-    
-    public void removePayment(Payment payment) {
-        payments.remove(payment);
-        payment.setFile(null);
-    }
+//    public void addReservation(Reservation reservation) {
+//        reservations.add(reservation);
+//        reservation.setFile(this);
+//    }
+//
+//    public void removeReservation(Reservation reservation) {
+//        reservations.remove(reservation);
+//        reservation.setFile(null);
+//    }
+//
+//    public void addPayment(Payment payment) {
+//        payments.add(payment);
+//        payment.setFile(this);
+//    }
+//
+//    public void removePayment(Payment payment) {
+//        payments.remove(payment);
+//        payment.setFile(null);
+//    }
     
 }

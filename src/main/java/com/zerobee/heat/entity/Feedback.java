@@ -24,9 +24,7 @@ public class Feedback {
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "file_id", nullable = false)
-    private File file;
+    private UUID fileId;
 
     @Column(name = "overall_rating", nullable = false)
     private Float overallRating;

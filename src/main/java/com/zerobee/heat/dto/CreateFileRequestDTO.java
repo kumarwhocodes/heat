@@ -1,5 +1,6 @@
 package com.zerobee.heat.dto;
 
+import com.zerobee.heat.enums.FileStage;
 import com.zerobee.heat.enums.FileStatus;
 import com.zerobee.heat.enums.PencilBookingStatus;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,8 @@ public class CreateFileRequestDTO {
     
     private String customerId;
     private UUID itineraryId;
+
+    private FileStage stage;
     
     private Boolean finalItineraryConfirmed;
 }

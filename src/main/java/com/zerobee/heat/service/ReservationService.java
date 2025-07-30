@@ -39,13 +39,8 @@ public class ReservationService {
 
     public ReservationDTO addReservation(ReservationDTO reservationDto) {
         Reservation reservation = reservationMapper.toEntity(reservationDto);
-        if(reservationDto.getFile().getId() == null) {
-            reservation.setFile(null);
-        } else {
-            UUID fileId = reservationDto.getFile().getId();
-            File file = fileRepo.findById(fileId)
-                    .orElseThrow(() -> new ResourceNotFoundException("File not found by id: "+fileId));
-            reservation.setFile(file);
+        if(!fileRepo.existsById(reservationDto.getFileId())) {
+            throw new ResourceNotFoundException("file not found by id: "+reservationDto.getFileId());
         }
         reservationRepo.save(reservation);
         return reservationMapper.toDTO(reservation);
@@ -63,10 +58,7 @@ public class ReservationService {
         if (reservationDto.getNumberOfGuests() != null) reservation.setNumberOfGuests(reservationDto.getNumberOfGuests());
         if (reservationDto.getPrice() != null) reservation.setPrice(reservationDto.getPrice());
         if (reservationDto.getStatus() != null) reservation.setStatus(reservationDto.getStatus());
-        if (reservationDto.getFile() != null){
-            File file = fileMapper.toEntity(reservationDto.getFile());
-            reservation.setFile(file);
-        }
+        if (reservationDto.getFileId() != null) reservation.setFileId(reservationDto.getFileId());
 
         return reservationMapper.toDTO(reservationRepo.save(reservation));
     }

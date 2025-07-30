@@ -6,6 +6,7 @@ import com.zerobee.heat.exception.ResourceNotFoundException;
 import com.zerobee.heat.mapper.FeedbackMapper;
 import com.zerobee.heat.repo.CustomerRepo;
 import com.zerobee.heat.repo.FeedbackRepo;
+import com.zerobee.heat.repo.FileRepo;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ public class FeedbackService {
     private final FeedbackRepo feedbackRepo;
     private final FeedbackMapper feedbackMapper;
     private final CustomerRepo customerRepo;
+    private final FileRepo fileRepo;
 
     public List<FeedbackDTO> getAllFeedbacks() {
         return feedbackRepo.findAll()
@@ -37,13 +39,13 @@ public class FeedbackService {
 
     @Transactional
     public FeedbackDTO addFeedback(FeedbackDTO feedbackDTO) {
-        if(!customerRepo.existsById(feedbackDTO.getCustomerId()))
-        {
+        if(!customerRepo.existsById(feedbackDTO.getCustomerId())) {
             throw new ResourceNotFoundException("Customer with Id "+ feedbackDTO.getCustomerId()+" do not exist.");
         }
+        if(!fileRepo.existsById(feedbackDTO.getFileId())) {
+            throw new ResourceNotFoundException("File with Id " + feedbackDTO.getFileId()+" do not exist.");
+        }
         Feedback feedback = feedbackMapper.toEntity(feedbackDTO);
-
-        // You can add additional validation here if needed (e.g., validate customer/file presence)
 
         Feedback savedFeedback = feedbackRepo.save(feedback);
         return feedbackMapper.toDTO(savedFeedback);

@@ -38,9 +38,7 @@ public class Reservation {
     
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "file_id")
-    private File file;
+
+    private UUID fileId;
 }
 
