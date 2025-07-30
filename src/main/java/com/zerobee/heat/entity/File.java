@@ -51,7 +51,7 @@ public class File {
     
     private String fheId;
     
-    @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "fileId", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<>();
     
     @OneToMany(mappedBy = "file", cascade = CascadeType.ALL, orphanRemoval = true)

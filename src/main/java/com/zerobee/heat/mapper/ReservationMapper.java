@@ -4,7 +4,7 @@ import com.zerobee.heat.dto.ReservationDTO;
 import com.zerobee.heat.entity.Reservation;
 import org.mapstruct.Mapper;
 
-@Mapper(componentModel = "spring", uses = {FileMapper.class})
+@Mapper(componentModel = "spring")
 public interface ReservationMapper {
 
     Reservation toEntity(ReservationDTO reservationDTO);
