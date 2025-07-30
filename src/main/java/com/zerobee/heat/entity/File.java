@@ -18,7 +18,9 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "files")
+@Table(name = "files", uniqueConstraints = {
+        @UniqueConstraint(columnNames = "itinerary_id")
+})
 public class File {
     
     @Id
@@ -27,7 +29,11 @@ public class File {
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private PencilBookingStatus pencilBooking;
+    private PencilBookingStatus vehiclePencilBooking;
+    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private PencilBookingStatus hotelPencilBooking;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -60,28 +66,5 @@ public class File {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private FileStage stage; // SALES, OPERATIONS, CLOSED, DEAD
-    
-    @Column(nullable = false)
-    private Boolean finalItineraryConfirmed;
-    
-//    public void addReservation(Reservation reservation) {
-//        reservations.add(reservation);
-//        reservation.setFile(this);
-//    }
-//
-//    public void removeReservation(Reservation reservation) {
-//        reservations.remove(reservation);
-//        reservation.setFile(null);
-//    }
-//
-//    public void addPayment(Payment payment) {
-//        payments.add(payment);
-//        payment.setFile(this);
-//    }
-//
-//    public void removePayment(Payment payment) {
-//        payments.remove(payment);
-//        payment.setFile(null);
-//    }
     
 }

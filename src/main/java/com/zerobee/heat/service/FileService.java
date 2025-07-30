@@ -5,6 +5,7 @@ import com.zerobee.heat.dto.FileDTO;
 import com.zerobee.heat.entity.Customer;
 import com.zerobee.heat.entity.File;
 import com.zerobee.heat.entity.Itinerary;
+import com.zerobee.heat.enums.FileStage;
 import com.zerobee.heat.enums.FileStatus;
 import com.zerobee.heat.enums.PencilBookingStatus;
 import com.zerobee.heat.exception.ConflictException;
@@ -68,13 +69,6 @@ public class FileService {
                 .collect(Collectors.toList());
     }
     
-    public List<FileDTO> getFilesByPencilBooking(PencilBookingStatus pencilBooking) {
-        List<File> files = fileRepo.findByPencilBooking(pencilBooking);
-        return files.stream()
-                .map(fileMapper::toDTO)
-                .collect(Collectors.toList());
-    }
-    
     public List<FileDTO> getFilesByFheId(String fheId) {
         List<File> files = fileRepo.findByFheId(fheId);
         if (files.isEmpty()) {
@@ -94,21 +88,16 @@ public class FileService {
         Itinerary itinerary = itineraryRepo.findById(request.getItineraryId())
                 .orElseThrow(() -> new ResourceNotFoundException("Itinerary not found with id: " + request.getItineraryId()));
         
-        // FHE ID validation
-        if (request.getFheId() != null && fileRepo.existsByFheId(request.getFheId())) {
-            throw new ConflictException("File with FHE ID already exists: " + request.getFheId());
-        }
-        
         // Create File entity with the IDs (internal use)
         File file = File.builder()
-                .pencilBooking(request.getPencilBooking())
-                .status(request.getStatus())
-                .isMature(request.getIsMature())
-                .fheId(request.getFheId())
+                .vehiclePencilBooking(request.getVehiclePencilBooking())
+                .hotelPencilBooking(request.getHotelPencilBooking())
+                .status(FileStatus.PENDING)
+                .isMature(false)
+                .fheId(null)
                 .customerId(request.getCustomerId())    // Store ID internally
                 .itineraryId(request.getItineraryId())  // Store ID internally
-                .stage(request.getStage())
-                .finalItineraryConfirmed(request.getFinalItineraryConfirmed())
+                .stage(FileStage.SALES)
                 .build();
         
         File savedFile = fileRepo.save(file);
@@ -116,13 +105,14 @@ public class FileService {
         // Build response with full objects (no IDs exposed)
         return FileDTO.builder()
                 .id(savedFile.getId())
-                .pencilBooking(savedFile.getPencilBooking())
+                .vehiclePencilBooking(savedFile.getVehiclePencilBooking())
+                .hotelPencilBooking(savedFile.getHotelPencilBooking())
                 .status(savedFile.getStatus())
                 .isMature(savedFile.getIsMature())
                 .fheId(savedFile.getFheId())
                 .customer(customerMapper.toDTO(customer))        // Full CustomerDTO
-                .itinerary(itineraryMapper.toDTO(itinerary))     // Full ItineraryDTO
-                .finalItineraryConfirmed(savedFile.getFinalItineraryConfirmed())
+//                .itinerary(itineraryMapper.toDTO(itinerary))     // Full ItineraryDTO
+                .stage(savedFile.getStage())
                 .build();
     }
     
@@ -133,24 +123,22 @@ public class FileService {
                 .orElseThrow(() -> new ResourceNotFoundException("File not found with id: " + id));
         
         // Check FHE ID conflict
-        if (fileDTO.getFheId() != null &&
-                !fileDTO.getFheId().equals(existingFile.getFheId()) &&
-                fileRepo.existsByFheId(fileDTO.getFheId())) {
+        if (fileDTO.getFheId() != null) {
             throw new ConflictException("File with FHE ID already exists: " + fileDTO.getFheId());
         }
         
         // Update fields
-        if (fileDTO.getPencilBooking() != null)
-            existingFile.setPencilBooking(fileDTO.getPencilBooking());
-        if (fileDTO.getStatus() != null)
-            existingFile.setStatus(fileDTO.getStatus());
-        if (fileDTO.getIsMature() != null)
-            existingFile.setIsMature(fileDTO.getIsMature());
-        if (fileDTO.getFheId() != null)
-            existingFile.setFheId(fileDTO.getFheId());
+        if (fileDTO.getVehiclePencilBooking() != null)
+            existingFile.setVehiclePencilBooking(fileDTO.getVehiclePencilBooking());
+        if (fileDTO.getHotelPencilBooking() != null)
+            existingFile.setHotelPencilBooking(fileDTO.getHotelPencilBooking());
+        if (fileDTO.getStatus() != null) existingFile.setStatus(fileDTO.getStatus());
+        if (fileDTO.getIsMature() != null) existingFile.setIsMature(fileDTO.getIsMature());
+        if (fileDTO.getFheId() != null) existingFile.setFheId(fileDTO.getFheId());
+        if (fileDTO.getStage() != null) existingFile.setStage(fileDTO.getStage());
         
         File updatedFile = fileRepo.save(existingFile);
-        return getFileById(updatedFile.getId());
+        return fileMapper.toDTO(updatedFile);
     }
     
     @Transactional

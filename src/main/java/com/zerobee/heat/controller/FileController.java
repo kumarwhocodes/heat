@@ -55,12 +55,6 @@ public class FileController {
                 fileService.getFilesByStatus(status));
     }
     
-    @GetMapping("/pencil-booking/{pencilBooking}")
-    public CustomResponse<List<FileDTO>> getFilesByPencilBooking(@PathVariable PencilBookingStatus pencilBooking) {
-        return new CustomResponse<>(HttpStatus.OK, "Files fetched by pencil booking status",
-                fileService.getFilesByPencilBooking(pencilBooking));
-    }
-    
     @GetMapping("/mature")
     public CustomResponse<List<FileDTO>> getMatureFiles() {
         return new CustomResponse<>(HttpStatus.OK, "Mature files fetched", fileService.getMatureFiles());

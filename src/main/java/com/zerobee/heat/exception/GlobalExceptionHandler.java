@@ -79,9 +79,12 @@ public class GlobalExceptionHandler {
     
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<CustomResponse<Void>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        String message;
+        if (ex.getMessage().contains("files_itinerary_id_key")) message = "File with the itinerary id already exists!";
+        else message = ex.getMessage();
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
-                .body(new CustomResponse<>(HttpStatus.CONFLICT, ex.getMessage(), null));
+                .body(new CustomResponse<>(HttpStatus.CONFLICT, message, null));
     }
     
     @ExceptionHandler({AccessDeniedException.class, AuthorizationDeniedException.class})

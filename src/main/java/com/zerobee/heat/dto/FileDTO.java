@@ -1,5 +1,6 @@
 package com.zerobee.heat.dto;
 
+import com.zerobee.heat.enums.FileStage;
 import com.zerobee.heat.enums.FileStatus;
 import com.zerobee.heat.enums.PencilBookingStatus;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,8 @@ import java.util.UUID;
 @AllArgsConstructor
 public class FileDTO {
     private UUID id;
-    private PencilBookingStatus pencilBooking;
+    private PencilBookingStatus vehiclePencilBooking;
+    private PencilBookingStatus hotelPencilBooking;
     private FileStatus status;
     private Boolean isMature;
     private String fheId;
@@ -23,7 +25,7 @@ public class FileDTO {
     private CustomerDTO customer;
     private ItineraryDTO itinerary;
     
-    private Boolean finalItineraryConfirmed;
+    private FileStage stage;
 }
 
 

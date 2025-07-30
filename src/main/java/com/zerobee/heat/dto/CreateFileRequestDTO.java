@@ -15,15 +15,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateFileRequestDTO {
-    private PencilBookingStatus pencilBooking;
-    private FileStatus status;
-    private Boolean isMature;
-    private String fheId;
+    private PencilBookingStatus vehiclePencilBooking;
+    private PencilBookingStatus hotelPencilBooking;
     
     private String customerId;
     private UUID itineraryId;
-
-    private FileStage stage;
-    
-    private Boolean finalItineraryConfirmed;
 }

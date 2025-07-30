@@ -18,9 +18,6 @@ public interface FileRepo extends JpaRepository<File, UUID> {
     // Find files by status
     List<File> findByStatus(FileStatus status);
     
-    // Find files by pencil booking status
-    List<File> findByPencilBooking(PencilBookingStatus pencilBooking);
-    
     // Find files by customer ID
     List<File> findByCustomerId(String customerId);
     

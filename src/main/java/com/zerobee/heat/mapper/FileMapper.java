@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 public interface FileMapper {
     
     @Mapping(target = "customer", source = "customer")
-    @Mapping(target = "itinerary", source = "itinerary")
+    @Mapping(target = "itinerary", ignore = true)
     FileDTO toDTO(File file);
     
     @Mapping(target = "id", ignore = true)
