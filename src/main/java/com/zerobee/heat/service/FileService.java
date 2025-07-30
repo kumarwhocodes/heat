@@ -111,7 +111,7 @@ public class FileService {
                 .isMature(savedFile.getIsMature())
                 .fheId(savedFile.getFheId())
                 .customer(customerMapper.toDTO(customer))        // Full CustomerDTO
-//                .itinerary(itineraryMapper.toDTO(itinerary))     // Full ItineraryDTO
+                .itinerary(itineraryMapper.toDTO(itinerary))     // Full ItineraryDTO
                 .stage(savedFile.getStage())
                 .build();
     }

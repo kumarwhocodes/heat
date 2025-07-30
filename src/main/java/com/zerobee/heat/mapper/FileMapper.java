@@ -7,9 +7,8 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring", uses = {CustomerMapper.class, ItineraryMapper.class})
 public interface FileMapper {
-    
-    @Mapping(target = "customer", source = "customer")
-    @Mapping(target = "itinerary", ignore = true)
+
+    @Mapping(target = "customer.itineraries", ignore = true)
     FileDTO toDTO(File file);
     
     @Mapping(target = "id", ignore = true)
