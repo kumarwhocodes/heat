@@ -122,11 +122,6 @@ public class FileService {
         File existingFile = fileRepo.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("File not found with id: " + id));
         
-        // Check FHE ID conflict
-        if (fileDTO.getFheId() != null) {
-            throw new ConflictException("File with FHE ID already exists: " + fileDTO.getFheId());
-        }
-        
         // Update fields
         if (fileDTO.getVehiclePencilBooking() != null)
             existingFile.setVehiclePencilBooking(fileDTO.getVehiclePencilBooking());

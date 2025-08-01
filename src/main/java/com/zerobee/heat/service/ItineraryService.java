@@ -69,18 +69,6 @@ public class ItineraryService {
         // Add the itinerary to the customer's collection (using helper method)
         customer.addItinerary(savedItinerary);
         
-        // Handle day-wise entries if present
-        if (itineraryDto.getDayWiseList() != null && !itineraryDto.getDayWiseList().isEmpty()) {
-            itineraryDto.getDayWiseList().forEach(dayWiseDto -> {
-                DayWise dayWise = dayWiseMapper.toEntity(dayWiseDto);
-                dayWise.setItinerary(savedItinerary);
-                DayWise savedDayWise = dayWiseRepo.save(dayWise);
-                
-                // Use helper method to maintain bidirectional relationship
-                savedItinerary.addDayWise(savedDayWise);
-            });
-        }
-        
         return itineraryMapper.toDTO(savedItinerary);
     }
     

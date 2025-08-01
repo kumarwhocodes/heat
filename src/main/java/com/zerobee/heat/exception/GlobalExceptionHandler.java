@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.SignatureException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -19,6 +20,17 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+    
+    //Incorrect Password
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<CustomResponse<Object>> handleBadCredentials(BadCredentialsException ex) {
+        CustomResponse<Object> response = new CustomResponse<>(
+                HttpStatus.UNAUTHORIZED,
+                "Invalid email or password",
+                null
+        );
+        return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
+    }
     
     //JWTs Exception
     @ExceptionHandler(ExpiredJwtException.class)
